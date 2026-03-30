@@ -98,4 +98,14 @@ class AlignmentView @JvmOverloads constructor(
         }
         return true // Indica che abbiamo gestito il tocco
     }
+    fun getAlignedBitmap(): Bitmap {
+        // Crea una nuova Bitmap vuota con le dimensioni della View
+        val resultBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(resultBitmap)
+
+        // Forza la View a disegnarsi su questo nuovo Canvas
+        this.draw(canvas)
+
+        return resultBitmap
+    }
 }
