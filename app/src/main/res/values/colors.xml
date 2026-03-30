@@ -2,4 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="derma_teal">#17A2B8</color> <color name="derma_teal_light">#EBF5F7</color> <color name="derma_teal_stroke">#D1E7EB</color> <color name="derma_text_dark">#212121</color>
+    <color name="derma_text_grey">#757575</color>
 </resources>

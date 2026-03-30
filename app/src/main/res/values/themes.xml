@@ -1,9 +1,26 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.DermaBSA" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <item name="colorPrimary">@color/derma_teal</item>
+
+        <item name="colorOnPrimary">@color/white</item>
+
+        <item name="colorSecondary">@color/derma_teal_light</item>
+
+        <item name="materialButtonStyle">@style/DermaBSA.Button</item>
+
     </style>
 
     <style name="Theme.DermaBSA" parent="Base.Theme.DermaBSA" />
+
+    <style name="DermaBSA.Button" parent="Widget.Material3.Button">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="DermaHotspot">
+        <item name="android:background">trasparent</item> <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
 </resources>
