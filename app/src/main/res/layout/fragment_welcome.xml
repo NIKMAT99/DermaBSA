@@ -33,10 +33,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start"
-        android:layout_width="211dp"
-        android:layout_height="62dp"
-        android:layout_marginBottom="32dp"
-        android:text="Inizia Misurazione"
+        android:layout_width="134dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="64dp"
+        android:text="Inizia"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

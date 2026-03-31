@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+    <androidx.camera.view.PreviewView
+    android:id="@+id/view_finder"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        tools:background="#FFFFFF"/>
+
+    <ImageView
+        android:id="@+id/iv_camera_guide_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="40dp"
+        android:alpha="0.5"
+        tools:src="@drawable/overlay_headF"
+        app:tint="#E0E0E0" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="32dp"
+        android:background="#80FFFFFF" app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btn_capture_photo"
+            android:layout_width="75dp"
+            android:layout_height="73dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="40dp"
+            app:cardElevation="4dp"
+            app:strokeColor="@color/derma_teal_light"
+            app:strokeWidth="4dp">
+
+            <View
+                android:layout_width="70dp"
+                android:layout_height="57dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_circle_teal" />
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
