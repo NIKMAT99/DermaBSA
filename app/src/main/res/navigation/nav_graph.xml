@@ -3,67 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/welcomeFragment"> <fragment
-    android:id="@+id/welcomeFragment"
-    android:name="com.example.dermabsa.WelcomeFragment"
-    android:label="Welcome"
-    tools:layout="@layout/fragment_welcome">
-    <action
-        android:id="@+id/action_welcomeFragment_to_homeFragment"
-        app:destination="@id/homeFragment" />
-</fragment>
+    app:startDestination="@id/welcomeFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.dermabsa.HomeFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/welcomeFragment"
+        android:name="com.example.dermabsa.ui.WelcomeFragment"
+        android:label="Welcome"
+        tools:layout="@layout/fragment_welcome">
         <action
-            android:id="@+id/action_homeFragment_to_workspaceFragment"
+            android:id="@+id/action_welcome_to_workspace"
             app:destination="@id/workspaceFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/workspaceFragment"
-        android:name="com.example.dermabsa.WorkspaceFragment"
-        android:label="Workspace"
+        android:name="com.example.dermabsa.ui.WorkspaceFragment"
+        android:label="Scelta Distretto"
         tools:layout="@layout/fragment_workspace">
         <action
-            android:id="@+id/action_workspaceFragment_to_scanFragment"
+            android:id="@+id/action_workspace_to_scan"
             app:destination="@id/scanFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/scanFragment"
-        android:name="com.example.dermabsa.ScanFragment"
-        android:label="Scan"
+        android:name="com.example.dermabsa.ui.ScanFragment"
+        android:label="Scansione"
         tools:layout="@layout/fragment_scan">
         <action
-            android:id="@+id/action_scanFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
-        <action
-            android:id="@+id/action_scanFragment_to_photoConfirmFragment"
-            app:destination="@id/photoConfirmFragment" />
+            android:id="@+id/action_scan_to_analysis"
+            app:destination="@id/analysisFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/cameraFragment"
-        android:name="com.example.dermabsa.CameraFragment"
-        android:label="Camera"
-        tools:layout="@layout/fragment_camera">
-        <argument
-            android:name="selectedRegion"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_cameraFragment_to_photoConfirmFragment"
-            app:destination="@id/photoConfirmFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/photoConfirmFragment"
-        android:name="com.example.dermabsa.PhotoConfirmFragment"
-        android:label="Confirm Photo"
-        tools:layout="@layout/fragment_photo_confirm">
-    </fragment>
+        android:id="@+id/analysisFragment"
+        android:name="com.example.dermabsa.ui.AnalysisFragment"
+        android:label="Analisi e Calcolo" />
 
 </navigation>
