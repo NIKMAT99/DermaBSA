@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/white">
     <androidx.camera.view.PreviewView
     android:id="@+id/view_finder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-        tools:background="#FFFFFF"/>
+        tools:background="@color/white"/>
 
     <ImageView
         android:id="@+id/iv_camera_guide_overlay"
@@ -18,14 +18,15 @@
         android:layout_height="match_parent"
         android:padding="40dp"
         android:alpha="0.5"
-        tools:src="@drawable/overlay_headF"
+        tools:src="@drawable/overlay_head_f"
         app:tint="#E0E0E0" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="32dp"
-        android:background="#80FFFFFF" app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/camera_bottom_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 

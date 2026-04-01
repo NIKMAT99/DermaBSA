@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"> <TextView
+    android:background="@color/white"> <TextView
     android:id="@+id/tv_confirm_title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Usa due dita per zoomare e spostare la foto"
-        android:textColor="#434343"
+        android:textColor="@color/text_muted"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,14 +55,14 @@
             android:layout_height="match_parent"
             android:padding="40dp"
             android:alpha="0.5"
-            tools:src="@drawable/overlay_troncoF"
+            tools:src="@drawable/overlay_petto_f"
             app:tint="@color/derma_teal" /> </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_controls_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -71,7 +71,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_rotate" app:layout_constraintStart_toStartOf="parent"
+            android:src="@android:drawable/ic_menu_rotate"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="@color/black" />
 
@@ -81,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Guida:"
-            android:textColor="#000000"
+            android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/btn_rotate_photo"
             app:layout_constraintStart_toEndOf="@id/btn_rotate_photo"

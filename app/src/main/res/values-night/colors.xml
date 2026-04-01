@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#121212</color>
+    <color name="black">#FFFFFFFF</color>
+    <color name="derma_teal">#26C6DA</color>
+    <color name="derma_teal_light">#1A2B2E</color>
+    <color name="derma_teal_stroke">#2A4A50</color>
+    <color name="derma_text_dark">#E0E0E0</color>
+    <color name="derma_text_grey">#BDBDBD</color>
+    <color name="text_muted">#5F5959</color>
+    <color name="camera_bottom_bar">#80000000</color>
+    <color name="card">#5F5959FF</color>
+</resources>

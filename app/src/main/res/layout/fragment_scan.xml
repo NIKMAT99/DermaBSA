@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A0000000" android:padding="20dp">
+    android:background="@color/text_muted" android:padding="20dp">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_scan_dialog"
@@ -87,18 +87,18 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
-                    android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="12dp">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="end"
-                        app:cardBackgroundColor="#F0F0F0"
+                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="0dp">
 
@@ -106,7 +106,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="5dp"
-                            android:src="@drawable/ic_scan" app:tint="#A0A0A0" />
+                            android:src="@drawable/ic_scan"
+                            app:tint="#A0A0A0" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
@@ -123,14 +124,15 @@
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
                             android:paddingTop="12dp"
+                            android:paddingRight="16dp"
                             android:paddingBottom="12dp">
 
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_home" app:tint="@color/white" />
+                                android:src="@drawable/ic_home"
+                                app:tint="@color/white" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -159,18 +161,18 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
-                    android:orientation="vertical"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="12dp">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="end"
-                        app:cardBackgroundColor="#F0F0F0"
+                        app:cardBackgroundColor="@color/white"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="0dp">
 
@@ -178,7 +180,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:padding="5dp"
-                            android:src="@drawable/ic_scan" app:tint="#A0A0A0" />
+                            android:src="@drawable/ic_scan"
+                            app:tint="#A0A0A0" />
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
@@ -195,14 +198,15 @@
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:paddingLeft="16dp"
-                            android:paddingRight="16dp"
                             android:paddingTop="12dp"
+                            android:paddingRight="16dp"
                             android:paddingBottom="12dp">
 
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_scan" app:tint="@color/white" />
+                                android:src="@drawable/ic_scan"
+                                app:tint="@color/white" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -218,7 +222,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Utilizza la fotocamera per scattare una nuova foto"
+                        android:text="Usa la fotocamera per scattare la foto"
                         android:textAlignment="center"
                         android:textColor="@color/derma_text_grey"
                         android:textSize="12sp" />
