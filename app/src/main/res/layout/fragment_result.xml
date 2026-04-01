@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"> <TextView
+    android:id="@+id/tv_confirm_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:text="Areee Lesionate"
+    android:textColor="@color/black"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_confirm_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Vengono evidenziate le aree lesionate da psioriasi"
+        android:textColor="#434343"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_confirm_title" />
+
+    <FrameLayout
+        android:id="@+id/canvas_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="#000000"
+        app:layout_constraintBottom_toTopOf="@id/bottom_controls_panel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_confirm_subtitle">
+
+        <ImageView
+            android:id="@+id/iv_preview_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="matrix"
+            tools:src="@drawable/body_front" />
+
+        <ImageView
+            android:id="@+id/iv_confirm_guide_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="40dp"
+            android:alpha="0.5"
+            app:tint="@color/derma_teal" /> </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_controls_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+        
+        <TextView
+            android:layout_width=""
+            android:layout_height=""
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_exit_home"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:text="Esci"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toStartOf="@+id/btn_new_scan"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/black"
+            tools:layout_editor_absoluteY="92dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_new_scan"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/derma_teal"
+            android:text="Nuova Scansione"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_exit_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteY="92dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
