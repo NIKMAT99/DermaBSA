@@ -11,18 +11,40 @@
         android:label="Welcome"
         tools:layout="@layout/fragment_welcome">
         <action
-            android:id="@+id/action_welcome_to_workspace"
-            app:destination="@id/workspaceFragment" />
+            android:id="@+id/action_welcome_to_home"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.dermabsa.ui.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_workspace"
+            app:destination="@id/workspaceFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/workspaceFragment"
-        android:name="com.example.dermabsa.ui.WorkspaceFragment"
+        android:name="com.example.dermabsa.ui.WorkSpaceFragment"
         android:label="Scelta Distretto"
         tools:layout="@layout/fragment_workspace">
         <action
             android:id="@+id/action_workspace_to_scan"
-            app:destination="@id/scanFragment" />
+            app:destination="@id/scanFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -30,14 +52,88 @@
         android:name="com.example.dermabsa.ui.ScanFragment"
         android:label="Scansione"
         tools:layout="@layout/fragment_scan">
+
         <action
-            android:id="@+id/action_scan_to_analysis"
-            app:destination="@id/analysisFragment" />
+            android:id="@+id/action_scan_to_camera"
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_scan_to_confirm"
+            app:destination="@id/photoConfirmFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
-        android:id="@+id/analysisFragment"
-        android:name="com.example.dermabsa.ui.AnalysisFragment"
-        android:label="Analisi e Calcolo" />
+        android:id="@+id/cameraFragment"
+        android:name="com.example.dermabsa.ui.CameraFragment"
+        android:label="Fotocamera"
+        tools:layout="@layout/fragment_camera">
+        <argument android:name="selectedRegion" app:argType="string" android:defaultValue="Tronco" />
+        <action
+            android:id="@+id/action_camera_to_confirm"
+            app:destination="@id/photoConfirmFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/photoConfirmFragment"
+        android:name="com.example.dermabsa.ui.PhotoConfirmFragment"
+        android:label="Conferma Foto"
+        tools:layout="@layout/fragment_photo_confirm">
+        <action
+            android:id="@+id/action_confirm_to_loading"
+            app:destination="@id/loadingFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.example.dermabsa.ui.LoadingFragment"
+        android:label="Caricamento AI"
+        tools:layout="@layout/fragment_loading">
+        <action
+            android:id="@+id/action_loading_to_result"
+            app:destination="@id/resultFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.example.dermabsa.ui.ResultFragment"
+        android:label="Risultato BSA"
+        tools:layout="@layout/fragment_result">
+
+        <action
+            android:id="@+id/action_result_to_workspace"
+            app:destination="@id/workspaceFragment"
+            app:popUpTo="@id/workspaceFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_result_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+    </fragment>
 
 </navigation>
