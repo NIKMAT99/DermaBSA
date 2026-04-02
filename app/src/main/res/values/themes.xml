@@ -20,7 +20,8 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="DermaHotspot">
-        <item name="android:background">trasparent</item> <item name="android:clickable">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
 </resources>

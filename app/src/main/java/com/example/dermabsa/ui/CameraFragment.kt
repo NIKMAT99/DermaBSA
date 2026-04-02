@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +18,7 @@ import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.dermabsa.R
 import com.google.android.material.card.MaterialCardView
 import java.io.File
 import java.text.SimpleDateFormat
@@ -32,15 +32,14 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var viewFinder: PreviewView
 
-    // 1. GESTIONE DEL POP-UP DEI PERMESSI
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            startCamera() // Permesso accordato, accendiamo i motori!
+            startCamera()
         } else {
-            Toast.makeText(requireContext(), "Permesso fotocamera negato. Impossibile procedere.", Toast.LENGTH_LONG).show()
-            findNavController().popBackStack() // Torna indietro
+            Toast.makeText(requireContext(), "Permesso fotocamera negato.", Toast.LENGTH_LONG).show()
+            findNavController().popBackStack()
         }
     }
 
@@ -50,84 +49,68 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         viewFinder = view.findViewById(R.id.view_finder)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        // 2. IMPOSTA L'OVERLAY DINAMICO IN BASE ALLA ZONA SCELTA
         impostaOverlayDinamico(view)
 
-        // 3. CONTROLLA E CHIEDI IL PERMESSO FOTOCAMERA
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
         } else {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-        // 4. AZIONI DEI BOTTONI
-        view.findViewById<ImageButton>(R.id.btn_close_camera).setOnClickListener {
-            findNavController().popBackStack() // Tasto X: chiude e torna indietro
-        }
-
         view.findViewById<MaterialCardView>(R.id.btn_capture_photo).setOnClickListener {
-            scattaFoto() // Tasto grande bianco: Clic!
+            scattaFoto()
         }
     }
 
     private fun impostaOverlayDinamico(view: View) {
         val overlayImg = view.findViewById<ImageView>(R.id.iv_camera_guide_overlay)
+        val regioneScelta = arguments?.getString("REGION_KEY") ?: "TRUNK_FRONT"
 
-        // Recuperiamo il nome della zona passata dal WorkspaceFragment
-        // Se non trova nulla, usa "Tronco" come default per sicurezza
-        val regioneScelta = arguments?.getString("selectedRegion") ?: "Tronco"
-
-        // Cambiamo l'immagine in base al nome.
-        // ATTENZIONE: Assicurati che i nomi (R.drawable...) corrispondano ai file PNG che hai salvato!
         when (regioneScelta) {
-            "Testa" -> overlayImg.setImageResource(R.drawable.overlay_testa) // Sostituisci con il nome reale del tuo file
-            "Tronco Anteriore", "Tronco" -> overlayImg.setImageResource(R.drawable.overlay_tronco) // Sostituisci con il tuo file
-            "Gamba Sinistra (Fronte)" -> overlayImg.setImageResource(R.drawable.overlay_gamba) // Ecc...
-            // Aggiungi qui gli altri casi man mano che crei i ritagli!
+            "HEAD_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_head_f)
+            "HEAD_BACK" -> overlayImg.setImageResource(R.drawable.overlay_head_b)
+            "TRUNK_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_petto_f)
+            "ABDOMEN" -> overlayImg.setImageResource(R.drawable.overlay_addome_f)
+            "UPPER_BACK" -> overlayImg.setImageResource(R.drawable.overlay_tronco_b)
+            "LOWER_BACK" -> overlayImg.setImageResource(R.drawable.overlay_lower_b)
+            "ARM_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_arm_fsx)
+            "ARM_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_arm_fdx)
+            "ARM_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_arm_bsx)
+            "ARM_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_arm_bdx)
+            "LEG_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fsx)
+            "LEG_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fdx)
+            "LEG_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bsx)
+            "LEG_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bdx)
+            "GENITALS" -> overlayImg.setImageResource(R.drawable.overlay_gen)
+            else -> overlayImg.setImageResource(R.drawable.overlay_gen)
         }
     }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-
-            // Imposta l'anteprima sullo schermo
-            val preview = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(viewFinder.surfaceProvider)
-                }
-
-            // Prepara il "motore" per scattare la foto
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(viewFinder.surfaceProvider)
+            }
             imageCapture = ImageCapture.Builder().build()
-
-            // Scegli la fotocamera posteriore di default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
             try {
                 cameraProvider.unbindAll()
-                // Collega fotocamera, ciclo di vita del fragment, anteprima e scatto
                 cameraProvider.bindToLifecycle(viewLifecycleOwner, cameraSelector, preview, imageCapture)
             } catch (exc: Exception) {
                 Log.e("DermaBSA", "Uso della fotocamera fallito", exc)
             }
-
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
     private fun scattaFoto() {
         val imageCapture = imageCapture ?: return
-
-        // Crea un file temporaneo sicuro dove salvare la foto
         val photoFile = File(
             requireContext().externalCacheDir,
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ITALY).format(System.currentTimeMillis()) + ".jpg"
         )
-
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
-
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
@@ -135,11 +118,8 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(requireContext(), "Errore salvataggio foto", Toast.LENGTH_SHORT).show()
                 }
-
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-
-                    // FOTO SALVATA! Ora passiamo alla schermata di CONFERMA passandogli l'URI della foto
                     val bundle = Bundle().apply {
                         putString("photoUri", savedUri.toString())
                     }
@@ -151,6 +131,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        cameraExecutor.shutdown() // Chiudiamo il processo in background quando usciamo
+        cameraExecutor.shutdown()
     }
 }
