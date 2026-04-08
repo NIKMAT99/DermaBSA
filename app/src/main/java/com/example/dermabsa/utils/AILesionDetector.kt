@@ -40,6 +40,8 @@ class AILesionDetector(context: Context) {
         // 1. Preparazione: Le IA di solito richiedono immagini rimpicciolite (es. 256x256)
         val resizedBitmap = Bitmap.createScaledBitmap(alignedImage, 256, 256, true)
         val tensorImage = TensorImage.fromBitmap(resizedBitmap)
+        val resultBitmap = resizedBitmap.copy(Bitmap.Config.ARGB_8888, true)
+        val redOverlayColor = android.graphics.Color.argb(128, 255, 0, 0)
 
         // 2. Output: Prepariamo un array vuoto per ricevere la "maschera" dalla IA.
         // Immaginiamo che il modello restituisca una mappa 256x256 dove ogni pixel ha un valore da 0.0 a 1.0 (probabilità di psoriasi)
@@ -54,9 +56,9 @@ class AILesionDetector(context: Context) {
 
         for (x in 0 until 256) {
             for (y in 0 until 256) {
-                // Se la probabilità è maggiore del 50%, consideriamo il pixel come "lesione"
                 if (outputMask[0][x][y] > 0.5f) {
                     lesionPixelsInMask++
+                    resultBitmap.setPixel(x, y, redOverlayColor)
                 }
             }
         }
