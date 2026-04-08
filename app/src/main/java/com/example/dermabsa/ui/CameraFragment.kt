@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,6 +46,11 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
+        btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         viewFinder = view.findViewById(R.id.view_finder)
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -123,7 +129,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                     val bundle = Bundle().apply {
                         putString("photoUri", savedUri.toString())
                     }
-                    findNavController().navigate(R.id.action_cameraFragment_to_photoConfirmFragment, bundle)
+                    findNavController().navigate(R.id.action_camera_to_confirm, bundle)
                 }
             }
         )

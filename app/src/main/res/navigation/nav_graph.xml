@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/workspaceFragment"
-        android:name="com.example.dermabsa.ui.WorkSpaceFragment"
+        android:name="com.example.dermabsa.ui.WorkspaceFragment"
         android:label="Scelta Distretto"
         tools:layout="@layout/fragment_workspace">
         <action

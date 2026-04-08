@@ -4,6 +4,7 @@ import com.example.dermabsa.R
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
@@ -11,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.dermabsa.ui.AlignmentView
+import com.example.dermabsa.ui.AlignmentView // Assicurati che il nome sia corretto con quello del tuo progetto
 import com.example.dermabsa.utils.AILesionDetector
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,11 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
+        btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         // Inizializza l'IA
         aiLesionDetector = AILesionDetector(requireContext())
 
@@ -41,8 +47,7 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         // Carichiamo le immagini nella Custom View
         val photo = viewModel.patientPhoto.value
         if (photo != null) {
-            // Nota: qui mettiamo un'immagine fittizia trasparente come "mappa di sfondo"
-            // perché l'overlay lo sta già gestendo la tua compagna con 'guideOverlay'
+            // Immagine fittizia trasparente come "mappa di sfondo"
             val emptyMap = BitmapFactory.decodeResource(resources, R.drawable.body_front)
             alignmentView.setImages(emptyMap, photo)
         } else {
@@ -66,7 +71,7 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             findNavController().popBackStack()
         }
 
-        // Bottone Ruota (opzionale, se vuoi ruotare l'ImageView o la Matrix)
+        // Bottone Ruota
         btnRotate.setOnClickListener {
             Toast.makeText(requireContext(), "Usa due dita per ruotare l'immagine!", Toast.LENGTH_SHORT).show()
         }
@@ -80,20 +85,24 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
                 return@setOnClickListener
             }
 
-            // Cambiamo il testo del bottone per dare feedback all'utente
-            btnAccept.text = "Analisi in corso..."
+            // Cambiamo il testo del bottone e li blocchiamo per evitare doppi click
+            btnAccept.text = "Avvio..."
             btnAccept.isEnabled = false
             btnRetake.isEnabled = false
 
+            // Salviamo in memoria il Navigatore per poterlo usare mentre siamo in background
+            val navController = findNavController()
+
+            // 1. Estraiamo l'immagine allineata MENTRE siamo ancora su questa pagina
+            val finalImage = alignmentView.getAlignedBitmap()
+            val regionTotalPixels = finalImage.width * finalImage.height
+
             lifecycleScope.launch {
+                // 2. NAVIGAZIONE 1: Andiamo subito al LoadingFragment così l'utente vede lo spinner girare!
+                navController.navigate(R.id.action_confirm_to_loading)
+
+                // 3. Ora che l'utente vede il caricamento, eseguiamo l'IA pesante in background
                 val result = withContext(Dispatchers.Default) {
-                    // 1. Estraiamo l'immagine allineata dal tuo Canvas
-                    val finalImage = alignmentView.getAlignedBitmap()
-
-                    // 2. Calcoliamo l'area totale in pixel (l'intera vista)
-                    val regionTotalPixels = finalImage.width * finalImage.height
-
-                    // 3. Eseguiamo l'IA!
                     aiLesionDetector.analyzeImageAndCalculateBsa(
                         alignedImage = finalImage,
                         region = region,
@@ -101,9 +110,11 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
                     )
                 }
 
-                // 4. Salviamo il risultato e navighiamo alla pagina finale
+                // 4. L'IA ha finito! Salviamo il risultato...
                 viewModel.finalBsaResult.value = result
-                findNavController().navigate(R.id.action_photoConfirmFragment_to_resultFragment)
+
+                // 5. NAVIGAZIONE 2: Spostiamoci automaticamente alla schermata del Risultato!
+                navController.navigate(R.id.action_loading_to_result)
             }
         }
     }

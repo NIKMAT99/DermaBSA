@@ -7,16 +7,29 @@
     android:background="#FAFAFA"
     android:padding="20dp">
 
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="30dp"
+        android:layout_height="32dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@id/tv_header_home"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_header_home"
+        app:layout_constraintVertical_bias="1.0"
+        app:tint="@color/derma_teal" />
+
     <TextView
         android:id="@+id/tv_header_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="Seleziona Distretto"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/derma_text_dark"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_back"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -25,7 +38,7 @@
         android:layout_height="wrap_content"
         android:text="Seleziona la zona del corpo da analizzare"
         android:textColor="@color/derma_text_grey"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_header_home"
         app:layout_constraintTop_toBottomOf="@id/tv_header_home" />
 
     <LinearLayout

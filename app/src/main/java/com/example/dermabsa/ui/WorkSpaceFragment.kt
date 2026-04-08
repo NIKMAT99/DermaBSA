@@ -6,6 +6,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.dermabsa.R
+import android.widget.ImageButton
 import com.example.dermabsa.model.BodyRegion
 import androidx.navigation.fragment.findNavController
 import androidx.core.os.bundleOf
@@ -16,7 +17,13 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     private var selectedRegion: BodyRegion? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
+
+        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
+        btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         // Il TextView che mostra il testo a schermo
         val tvZonaSelezionata = view.findViewById<TextView>(R.id.tv_zona_selezionata)
