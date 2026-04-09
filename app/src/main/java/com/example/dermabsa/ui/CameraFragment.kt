@@ -2,8 +2,12 @@ package com.example.dermabsa.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
@@ -18,6 +22,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.dermabsa.R
 import com.google.android.material.card.MaterialCardView
@@ -26,9 +31,11 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import com.example.dermabsa.ui.MainViewModel
 
 class CameraFragment : Fragment(R.layout.fragment_camera) {
 
+    private val viewModel: MainViewModel by activityViewModels()
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var viewFinder: PreviewView
@@ -112,11 +119,14 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     private fun scattaFoto() {
         val imageCapture = imageCapture ?: return
+
+        // Uso 'cacheDir' invece di 'externalCacheDir' per prevenire crash su alcuni dispositivi
         val photoFile = File(
-            requireContext().externalCacheDir,
+            requireContext().cacheDir,
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ITALY).format(System.currentTimeMillis()) + ".jpg"
         )
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
@@ -124,12 +134,36 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
                 override fun onError(exc: ImageCaptureException) {
                     Toast.makeText(requireContext(), "Errore salvataggio foto", Toast.LENGTH_SHORT).show()
                 }
+
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    val bundle = Bundle().apply {
-                        putString("photoUri", savedUri.toString())
+
+                    try {
+                        // 1. Convertiamo l'Uri appena scattato in Bitmap
+                        val bitmap: Bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            val source = ImageDecoder.createSource(requireContext().contentResolver, savedUri)
+                            ImageDecoder.decodeBitmap(source)
+                        } else {
+                            @Suppress("DEPRECATION")
+                            MediaStore.Images.Media.getBitmap(requireContext().contentResolver, savedUri)
+                        }
+
+                        // 2. Copiamo in ARGB_8888 e lo mettiamo nel ViewModel (esattamente come in ScanFragment!)
+                        val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+                        viewModel.patientPhoto.value = mutableBitmap
+
+                        // 3. Prepariamo il Bundle e proseguiamo
+                        val bundle = Bundle().apply {
+                            putString("photoUri", savedUri.toString())
+                            // Passiamo avanti anche la REGION_KEY per i frammenti successivi se serve
+                            putString("REGION_KEY", arguments?.getString("REGION_KEY"))
+                        }
+                        findNavController().navigate(R.id.action_camera_to_confirm, bundle)
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(requireContext(), "Errore elaborazione immagine", Toast.LENGTH_SHORT).show()
                     }
-                    findNavController().navigate(R.id.action_camera_to_confirm, bundle)
                 }
             }
         )

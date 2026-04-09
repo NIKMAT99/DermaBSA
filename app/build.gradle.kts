@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation("org.tensorflow:tensorflow-lite:2.16.1")
     implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+    implementation("org.tensorflow:tensorflow-lite-select-tf-ops:2.16.1")
 
     testImplementation("junit:junit:4.13.2")
     implementation(libs.androidx.core.ktx)
