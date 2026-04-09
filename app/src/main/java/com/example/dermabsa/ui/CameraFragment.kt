@@ -63,7 +63,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
         }
 
-        view.findViewById<MaterialCardView>(R.id.btn_capture_photo).setOnClickListener {
+        view.findViewById<View>(R.id.btn_capture_photo).setOnClickListener {
             scattaFoto()
         }
     }

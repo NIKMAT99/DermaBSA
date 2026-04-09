@@ -38,23 +38,9 @@
         android:name="com.example.dermabsa.ui.WorkspaceFragment"
         android:label="Scelta Distretto"
         tools:layout="@layout/fragment_workspace">
-        <action
-            android:id="@+id/action_workspace_to_scan"
-            app:destination="@id/scanFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/scanFragment"
-        android:name="com.example.dermabsa.ui.ScanFragment"
-        android:label="Scansione"
-        tools:layout="@layout/fragment_scan">
 
         <action
-            android:id="@+id/action_scan_to_camera"
+            android:id="@+id/action_workspace_to_camera"
             app:destination="@id/cameraFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -62,7 +48,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_scan_to_confirm"
+            android:id="@+id/action_workspace_to_confirm"
             app:destination="@id/photoConfirmFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
