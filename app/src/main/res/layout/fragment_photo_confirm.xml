@@ -6,139 +6,147 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
     <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/derma_teal" />
-
-    <TextView
-    android:id="@+id/tv_confirm_title"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:text="Allinea e Conferma"
-    android:textColor="@color/black"
-    android:textSize="20sp"
-    android:textStyle="bold"
-    app:layout_constraintEnd_toEndOf="parent"
+    android:id="@+id/btn_back"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:src="@drawable/ic_arrow_back"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    app:layout_constraintTop_toTopOf="parent"
+    app:tint="@color/derma_teal" />
 
     <TextView
-        android:id="@+id/tv_confirm_subtitle"
+        android:id="@+id/tv_confirm_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Usa due dita per zoomare e spostare la foto"
-        android:textColor="@color/text_muted"
-        android:textSize="14sp"
+        android:text="Allinea e ruota"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_confirm_title" />
+        app:layout_constraintTop_toTopOf="@id/btn_back" />
 
-    <FrameLayout
-        android:id="@+id/canvas_container"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/editor_card"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="#000000"
+        android:layout_margin="16dp"
+        app:cardBackgroundColor="#000000"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#33FFFFFF"
+        app:strokeWidth="1dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_controls_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_confirm_subtitle">
+        app:layout_constraintTop_toBottomOf="@id/btn_back">
 
-        <com.example.dermabsa.ui.AlignmentView
-            android:id="@+id/alignment_view_preview"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_confirm_guide_overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="40dp"
-            android:alpha="0.5"
-            tools:src="@drawable/overlay_petto_f"
-            app:tint="@color/derma_teal" /> </FrameLayout>
+            <com.example.dermabsa.ui.AlignmentView
+                android:id="@+id/alignment_view_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/iv_confirm_guide_overlay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="40dp"
+                android:alpha="0.4"
+                android:scaleType="fitCenter"
+                app:tint="@color/derma_teal"
+                tools:src="@drawable/overlay_petto_f" />
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_controls_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="20dp"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <ImageButton
-            android:id="@+id/btn_rotate_photo"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_rotate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
+        android:background="@drawable/bg_bottom_panel_rounded"
+        android:padding="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="54dp">
 
         <TextView
-            android:id="@+id/tv_opacity_label"
+            android:id="@+id/tv_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Guida:"
-            android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@id/btn_rotate_photo"
-            app:layout_constraintStart_toEndOf="@id/btn_rotate_photo"
-            app:layout_constraintTop_toTopOf="@id/btn_rotate_photo" />
+            android:text="Trascina e pizzica per allineare alla sagoma"
+            android:textColor="@color/derma_text_dark"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ic_opacity"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_visibility"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_hint"
+            app:tint="#666666" />
 
         <SeekBar
             android:id="@+id/slider_guide_opacity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:max="100"
-            android:progress="50"
+            android:progress="40"
             android:progressTint="@color/derma_teal"
             android:thumbTint="@color/derma_teal"
-            app:layout_constraintBottom_toBottomOf="@id/btn_rotate_photo"
+            app:layout_constraintBottom_toBottomOf="@id/ic_opacity"
+            app:layout_constraintEnd_toStartOf="@id/btn_rotate_photo"
+            app:layout_constraintStart_toEndOf="@id/ic_opacity"
+            app:layout_constraintTop_toTopOf="@id/ic_opacity" />
+
+        <ImageButton
+            android:id="@+id/btn_rotate_photo"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/ic_rotate"
+            app:layout_constraintBottom_toBottomOf="@id/ic_opacity"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_opacity_label"
-            app:layout_constraintTop_toTopOf="@id/btn_rotate_photo" />
+            app:layout_constraintTop_toTopOf="@id/ic_opacity"
+            app:tint="#666666" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_retake_photo"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="164dp"
+            android:layout_height="50dp"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
             android:text="Rifai"
-            android:textColor="@color/black"
-            app:strokeColor="@color/black"
-            app:layout_constraintEnd_toStartOf="@id/btn_accept_photo"
+            android:textColor="@color/derma_text_dark"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_rotate_photo" />
+            app:layout_constraintTop_toBottomOf="@id/slider_guide_opacity" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_accept_photo"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="8dp"
-            android:text="Approva"
-            android:backgroundTint="@color/derma_teal"
+            android:layout_width="183dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:text="Analizza"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/derma_teal"
+            app:cornerRadius="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/btn_retake_photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_retake_photo"
-            app:layout_constraintTop_toBottomOf="@id/btn_rotate_photo" />
+            app:layout_constraintTop_toTopOf="@id/btn_retake_photo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
