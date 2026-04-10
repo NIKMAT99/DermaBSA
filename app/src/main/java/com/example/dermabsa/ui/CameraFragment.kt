@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.dermabsa.R
+import com.example.dermabsa.model.BodyRegion
 import com.google.android.material.card.MaterialCardView
 import java.io.File
 import java.text.SimpleDateFormat
@@ -77,7 +78,18 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     private fun impostaOverlayDinamico(view: View) {
         val overlayImg = view.findViewById<ImageView>(R.id.iv_camera_guide_overlay)
+
+        // 1. Leggiamo la regione passata
+        // 1. Leggiamo la regione passata come testo (String)
         val regioneScelta = arguments?.getString("REGION_KEY") ?: "TRUNK_FRONT"
+
+        // 2. Convertiamo il testo nel tipo 'BodyRegion' che il ViewModel si aspetta!
+        try {
+            viewModel.selectedRegion.value = BodyRegion.valueOf(regioneScelta)
+        } catch (e: Exception) {
+            // Se per caso c'è un errore di battitura, mettiamo il tronco di default per non far crashare l'app
+            viewModel.selectedRegion.value = BodyRegion.TRUNK_FRONT
+        }
 
         when (regioneScelta) {
             "HEAD_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_head_f)

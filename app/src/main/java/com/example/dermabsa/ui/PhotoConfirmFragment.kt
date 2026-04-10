@@ -1,5 +1,6 @@
 package com.example.dermabsa.ui
 
+import android.graphics.Bitmap
 import com.example.dermabsa.R
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -10,29 +11,19 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.dermabsa.ui.AlignmentView // Assicurati che il nome sia corretto con quello del tuo progetto
-import com.example.dermabsa.utils.AILesionDetector
+import com.example.dermabsa.ui.AlignmentView
 import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
-    // Recuperiamo i dati condivisi (foto scattata e zona scelta)
     private val viewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
-        btnBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
-
         // UI Binding
+        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
         val alignmentView = view.findViewById<AlignmentView>(R.id.alignment_view_preview)
         val guideOverlay = view.findViewById<ImageView>(R.id.iv_confirm_guide_overlay)
         val sliderOpacity = view.findViewById<SeekBar>(R.id.slider_guide_opacity)
@@ -40,19 +31,46 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         val btnAccept = view.findViewById<MaterialButton>(R.id.btn_accept_photo)
         val btnRotate = view.findViewById<View>(R.id.btn_rotate_photo)
 
-        // Carichiamo le immagini nella Custom View
+        // --- 1. SETTA L'OVERLAY DINAMICO ---
+        // Aggiungiamo .name per trasformare il BodyRegion di nuovo in testo!
+        val regioneScelta = viewModel.selectedRegion.value?.name
+            ?: arguments?.getString("REGION_KEY")
+            ?: "TRUNK_FRONT"
+
+        val resId = when (regioneScelta) {
+            "HEAD_FRONT" -> R.drawable.overlay_head_f
+            "HEAD_BACK" -> R.drawable.overlay_head_b
+            "TRUNK_FRONT" -> R.drawable.overlay_petto_f
+            "ABDOMEN" -> R.drawable.overlay_addome_f
+            "UPPER_BACK" -> R.drawable.overlay_tronco_b
+            "LOWER_BACK" -> R.drawable.overlay_lower_b
+            "ARM_LEFT_FRONT" -> R.drawable.overlay_arm_fsx
+            "ARM_RIGHT_FRONT" -> R.drawable.overlay_arm_fdx
+            "ARM_LEFT_BACK" -> R.drawable.overlay_arm_bsx
+            "ARM_RIGHT_BACK" -> R.drawable.overlay_arm_bdx
+            "LEG_LEFT_FRONT" -> R.drawable.overlay_leg_fsx
+            "LEG_RIGHT_FRONT" -> R.drawable.overlay_leg_fdx
+            "LEG_LEFT_BACK" -> R.drawable.overlay_leg_bsx
+            "LEG_RIGHT_BACK" -> R.drawable.overlay_leg_bdx
+            "GENITALS" -> R.drawable.overlay_gen
+            else -> R.drawable.overlay_petto_f
+        }
+        guideOverlay.setImageResource(resId)
+
+        // --- 2. CARICAMENTO IMMAGINI NELLA CUSTOM VIEW ---
         val photo = viewModel.patientPhoto.value
         if (photo != null) {
-            // Immagine fittizia trasparente come "mappa di sfondo"
-            val emptyMap = BitmapFactory.decodeResource(resources, R.drawable.body_front)
-            alignmentView.setImages(emptyMap, photo)
+            // Creiamo una piccola bitmap trasparente 1x1 invece di caricare 'body_front'
+            val emptyBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+            alignmentView.setImages(emptyBitmap, photo)
         } else {
             Toast.makeText(requireContext(), "Errore: Foto non trovata", Toast.LENGTH_SHORT).show()
         }
 
-        // --- GESTIONE DEI CONTROLLI UI ---
+        // --- 3. GESTIONE OPACITÀ (SeekBar) ---
+        // Sincronizziamo l'opacità iniziale con il valore attuale della SeekBar
+        guideOverlay.alpha = sliderOpacity.progress / 100f
 
-        // Slider Opacità Guida
         sliderOpacity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 // Converte il progresso 0-100 in opacità 0.0-1.0
@@ -62,14 +80,17 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        // Bottone Rifai: torna indietro alla schermata Scan
+        // --- 4. ALTRI CONTROLLI ---
+        btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         btnRetake.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        // Bottone Ruota
         btnRotate.setOnClickListener {
-            Toast.makeText(requireContext(), "Usa due dita per ruotare l'immagine!", Toast.LENGTH_SHORT).show()
+            alignmentView.rotate90()
         }
 
         btnAccept.setOnClickListener {
@@ -80,25 +101,20 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
                 return@setOnClickListener
             }
 
-            // Cambiamo il testo del bottone e lo blocchiamo
             btnAccept.text = "Avvio..."
             btnAccept.isEnabled = false
             btnRetake.isEnabled = false
 
-            // 1. Estraiamo l'immagine allineata dalla vista personalizzata
+            // Estraiamo l'immagine allineata e aggiorniamo il ViewModel
             val finalImage = alignmentView.getAlignedBitmap()
-
-            // 2. IMPORTANTISSIMO: Aggiorniamo la foto nel ViewModel con quella RITAGLIATA!
             viewModel.patientPhoto.value = finalImage
 
-            // 3. Navighiamo verso il caricamento. Sarà il LoadingFragment a gestire l'IA!
             findNavController().navigate(R.id.action_confirm_to_loading)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        // Se torniamo a questa schermata (es. dopo un errore), riabilitiamo i tasti!
         view?.let {
             val btnAccept = it.findViewById<MaterialButton>(R.id.btn_accept_photo)
             val btnRetake = it.findViewById<MaterialButton>(R.id.btn_retake_photo)

@@ -45,8 +45,19 @@ class AlignmentView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        mapBitmap?.let { canvas.drawBitmap(it, 0f, 0f, paint) }
-        patientPhotoBitmap?.let { canvas.drawBitmap(it, photoMatrix, paint) }
+
+        // 1. Disegna prima la foto del paziente (sotto) applicando la matrice (zoom/spostamento/rotazione)
+        patientPhotoBitmap?.let {
+            canvas.drawBitmap(it, photoMatrix, paint)
+        }
+
+        // 2. Disegna la sagoma (sopra) fissa.
+        // Se la sagoma deve occupare tutto lo schermo, usiamo un Rect per scalarla correttamente.
+        mapBitmap?.let {
+            val src = android.graphics.Rect(0, 0, it.width, it.height)
+            val dst = android.graphics.Rect(0, 0, width, height)
+            canvas.drawBitmap(it, src, dst, paint)
+        }
     }
 
     /**
@@ -108,4 +119,13 @@ class AlignmentView @JvmOverloads constructor(
 
         return resultBitmap
     }
+
+    fun rotate90() {
+        // Ruota di 90 gradi prendendo come perno il centro della View
+        val centerX = width / 2f
+        val centerY = height / 2f
+        photoMatrix.postRotate(90f, centerX, centerY)
+        invalidate() // Ridisegna
+    }
 }
+

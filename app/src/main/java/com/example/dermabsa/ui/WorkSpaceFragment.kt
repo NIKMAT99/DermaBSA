@@ -181,10 +181,10 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                             MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Ricorda bene")
                                 .setMessage("Per aiutare l'AI a valutare correttamente la psoriasi, assicurati di:\n\n" +
-                                        "•  Avere un'ottima illuminazione (luce naturale o molto chiara).\n\n" +
-                                        "•  Usare uno sfondo neutro e pulito dietro di te.\n\n" +
-                                        "•  Tenere il telefono fermo per una messa a fuoco nitida.")
-                                .setPositiveButton("Ho capito, procedi") { innerDialog, _ ->
+                                        "Avere un'ottima illuminazione (luce naturale o molto chiara).\n\n" +
+                                        "Usare uno sfondo neutro e pulito dietro di te.\n\n" +
+                                        "Tenere il telefono fermo per una messa a fuoco nitida.")
+                                .setPositiveButton("Ho capito!") { innerDialog, _ ->
                                     // Andiamo alla fotocamera e passiamo il bundle!
                                     findNavController().navigate(R.id.action_workspace_to_camera, bundle)
                                 }
