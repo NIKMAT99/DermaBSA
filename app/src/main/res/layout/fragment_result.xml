@@ -113,7 +113,7 @@
             android:layout_marginStart="8dp"
             android:backgroundTint="@color/derma_teal"
             android:text="Nuova Scansione"
-            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_exit_home"
             app:layout_constraintTop_toBottomOf="@+id/tv_bsa_result" />

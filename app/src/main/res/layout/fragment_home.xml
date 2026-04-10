@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:text="Analisi Psoriasi "
                     android:textColor="@color/derma_text_grey"
-                    android:textSize="14sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -53,7 +53,7 @@
             android:layout_height="1dp"
             android:layout_marginTop="0dp"
             android:layout_marginBottom="16dp"
-            android:background="#E0E0E0" />
+            android:background="@color/derma_teal" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -114,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="COME FUNZIONA"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_muted"
             android:layout_marginBottom="16dp"/>
@@ -152,12 +152,13 @@
                         android:layout_height="wrap_content"
                         android:text="Seleziona la zona"
                         android:textStyle="bold"
+                        android:textSize="14sp"
                         android:textColor="@color/derma_text_dark"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tocca la parte del corpo interessata sulla mappa anatomica"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:textColor="@color/derma_text_grey"/>
                 </LinearLayout>
             </LinearLayout>
@@ -193,13 +194,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Scatta la foto"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="@color/derma_text_dark"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fotografa la zona da analizzare allineandola alla guida"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:textColor="@color/derma_text_grey"/>
                 </LinearLayout>
             </LinearLayout>
@@ -235,13 +237,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Analisi AI"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="@color/derma_text_dark"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="L'intelligenza artificiale evidenzia le lesioni e stima l'area affetta"
-                        android:textSize="13sp"
+                        android:textSize="14sp"
                         android:textColor="@color/derma_text_grey"/>
                 </LinearLayout>
             </LinearLayout>
