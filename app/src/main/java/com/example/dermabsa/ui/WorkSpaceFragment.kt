@@ -15,20 +15,50 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
-    // Questo è il nuovo selettore foto di Android (Zero permessi necessari!)
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
         if (uri != null) {
-            // L'utente ha scelto una foto!
-            // NOTA PER IL COLLEGA: Qui devi salvare l'URI della foto nel tuo ViewModel
-            // Esempio: viewModel.patientPhotoUri.value = uri
+            try {
+                // 1. Caricamento della foto forzando il formato "Software" per renderla visibile
+                val bitmap: Bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    val source = ImageDecoder.createSource(requireContext().contentResolver, uri)
+                    ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                        decoder.isMutableRequired = true
+                    }
+                } else {
+                    @Suppress("DEPRECATION")
+                    MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+                }
 
-            // ORA navighiamo alla pagina di conferma (perché ora abbiamo la foto)
-            findNavController().navigate(R.id.action_workspace_to_confirm)
+                // 2. Rimpiccioliamo l'immagine per non esaurire la memoria RAM (Max 1024px)
+                val maxDimension = 1024
+                val scale = Math.min(maxDimension.toFloat() / bitmap.width, maxDimension.toFloat() / bitmap.height)
+                val newWidth = Math.round(bitmap.width * scale)
+                val newHeight = Math.round(bitmap.height * scale)
+
+                val resizedBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+
+                // 3. Copiamo in formato ARGB_8888 e salviamo nel ViewModel
+                viewModel.patientPhoto.value = resizedBitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+                // 4. Prepariamo il bundle della zona e navighiamo alla conferma
+                val bundle = bundleOf("REGION_KEY" to selectedRegion?.name)
+                findNavController().navigate(R.id.action_workspace_to_confirm, bundle)
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "Errore elaborazione immagine", Toast.LENGTH_SHORT).show()
+            }
         } else {
-            // L'utente ha chiuso la galleria senza scegliere nulla (non facciamo niente)
+            // L'utente ha chiuso la galleria senza scegliere nulla
         }
     }
 

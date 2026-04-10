@@ -20,28 +20,27 @@ class LoadingFragment : Fragment(R.layout.fragment_loading) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val safeContext = requireContext()
         // Lanciamo l'analisi in un thread separato (Dispatchers.Default) per non bloccare l'interfaccia
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
             try {
-                // 1. Recupero dei dati reali salvati nei frammenti precedenti
                 val bitmap = viewModel.patientPhoto.value
                     ?: throw IllegalStateException("Immagine non trovata.")
                 val region = viewModel.selectedRegion.value
                     ?: throw IllegalStateException("Distretto anatomico non selezionato.")
 
-                // Per i pixel totali della regione, utilizziamo l'area totale dell'immagine allineata
                 val regionTotalPixels = bitmap.width * bitmap.height
 
-                // 2. Inizializzazione ed esecuzione del TUO modello AI reale
+                // 2. Usiamo il safeContext al posto di requireContext()
                 val aiDetector = AILesionDetector(requireContext())
-                val result = aiDetector.analyzeImageAndCalculateBsa(bitmap, region, regionTotalPixels)
-
-                // Chiudiamo l'interprete per evitare memory leak
+                val (result, highlightedBitmap) = aiDetector.analyzeImageAndCalculateBsa(bitmap, region, regionTotalPixels)
                 aiDetector.close()
 
                 // 3. Torniamo sul Main Thread per aggiornare la UI e navigare
                 withContext(Dispatchers.Main) {
                     viewModel.finalBsaResult.value = result
+                    viewModel.patientPhoto.value = highlightedBitmap
+
                     findNavController().navigate(R.id.action_loading_to_result)
                 }
 

@@ -23,7 +23,6 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
     // Recuperiamo i dati condivisi (foto scattata e zona scelta)
     private val viewModel: MainViewModel by activityViewModels()
-    private lateinit var aiLesionDetector: AILesionDetector
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,9 +31,6 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
-        // Inizializza l'IA
-        aiLesionDetector = AILesionDetector(requireContext())
 
         // UI Binding
         val alignmentView = view.findViewById<AlignmentView>(R.id.alignment_view_preview)
@@ -76,7 +72,6 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             Toast.makeText(requireContext(), "Usa due dita per ruotare l'immagine!", Toast.LENGTH_SHORT).show()
         }
 
-        // --- IL MOTORE DI CALCOLO (Bottone Approva) ---
         btnAccept.setOnClickListener {
             val region = viewModel.selectedRegion.value
 
@@ -85,44 +80,31 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
                 return@setOnClickListener
             }
 
-            // Cambiamo il testo del bottone e li blocchiamo per evitare doppi click
+            // Cambiamo il testo del bottone e lo blocchiamo
             btnAccept.text = "Avvio..."
             btnAccept.isEnabled = false
             btnRetake.isEnabled = false
 
-            // Salviamo in memoria il Navigatore per poterlo usare mentre siamo in background
-            val navController = findNavController()
-
-            // 1. Estraiamo l'immagine allineata MENTRE siamo ancora su questa pagina
+            // 1. Estraiamo l'immagine allineata dalla vista personalizzata
             val finalImage = alignmentView.getAlignedBitmap()
-            val regionTotalPixels = finalImage.width * finalImage.height
 
-            lifecycleScope.launch {
-                // 2. NAVIGAZIONE 1: Andiamo subito al LoadingFragment così l'utente vede lo spinner girare!
-                navController.navigate(R.id.action_confirm_to_loading)
+            // 2. IMPORTANTISSIMO: Aggiorniamo la foto nel ViewModel con quella RITAGLIATA!
+            viewModel.patientPhoto.value = finalImage
 
-                // 3. Ora che l'utente vede il caricamento, eseguiamo l'IA pesante in background
-                val result = withContext(Dispatchers.Default) {
-                    aiLesionDetector.analyzeImageAndCalculateBsa(
-                        alignedImage = finalImage,
-                        region = region,
-                        regionTotalPixels = regionTotalPixels
-                    )
-                }
-
-                // 4. L'IA ha finito! Salviamo il risultato...
-                viewModel.finalBsaResult.value = result
-
-                // 5. NAVIGAZIONE 2: Spostiamoci automaticamente alla schermata del Risultato!
-                navController.navigate(R.id.action_loading_to_result)
-            }
+            // 3. Navighiamo verso il caricamento. Sarà il LoadingFragment a gestire l'IA!
+            findNavController().navigate(R.id.action_confirm_to_loading)
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (::aiLesionDetector.isInitialized) {
-            aiLesionDetector.close()
+    override fun onResume() {
+        super.onResume()
+        // Se torniamo a questa schermata (es. dopo un errore), riabilitiamo i tasti!
+        view?.let {
+            val btnAccept = it.findViewById<MaterialButton>(R.id.btn_accept_photo)
+            val btnRetake = it.findViewById<MaterialButton>(R.id.btn_retake_photo)
+            btnAccept.text = "Conferma"
+            btnAccept.isEnabled = true
+            btnRetake.isEnabled = true
         }
     }
 }

@@ -38,14 +38,13 @@ class AILesionDetector(context: Context) {
     /**
      * Il cuore dell'IA: analizza la foto e restituisce il calcolo BSA.
      */
-    fun analyzeImageAndCalculateBsa(alignedImage: Bitmap, region: BodyRegion, regionTotalPixels: Int): BsaResult {
+    fun analyzeImageAndCalculateBsa(alignedImage: Bitmap, region: BodyRegion, regionTotalPixels: Int): Pair<BsaResult, Bitmap> {
         val tflite = interpreter ?: throw IllegalStateException("Il modello IA non è stato caricato correttamente.")
-
         // 1. Rimpiccioliamo a 256x256
         val resizedBitmap = Bitmap.createScaledBitmap(alignedImage, 256, 256, true)
 
-        // --- LA SOLUZIONE ALL'ERRORE: TRADUZIONE IN FLOAT32 (0.0 - 1.0) ---
-        // Creiamo una scatola di byte esatta per 256x256 pixel * 3 canali (RGB) * 4 byte (Float) = 786432 byte!
+        val resultBitmap = resizedBitmap.copy(Bitmap.Config.ARGB_8888, true)
+
         val byteBuffer = ByteBuffer.allocateDirect(4 * 256 * 256 * 3)
         byteBuffer.order(ByteOrder.nativeOrder())
 
@@ -57,13 +56,17 @@ class AILesionDetector(context: Context) {
         for (i in 0 until 256) {
             for (j in 0 until 256) {
                 val valPixel = intValues[pixel++]
-                // Separiamo i colori (Rosso, Verde, Blu) e dividiamo per 255.0 per avere valori da 0.0 a 1.0
-                byteBuffer.putFloat(((valPixel shr 16) and 0xFF) / 255.0f) // R
-                byteBuffer.putFloat(((valPixel shr 8) and 0xFF) / 255.0f)  // G
-                byteBuffer.putFloat((valPixel and 0xFF) / 255.0f)          // B
+
+                val r = ((valPixel shr 16) and 0xFF) / 255.0f
+                val g = ((valPixel shr 8) and 0xFF) / 255.0f
+                val b = (valPixel and 0xFF) / 255.0f
+
+                byteBuffer.putFloat(b) // Prima il Blu
+                byteBuffer.putFloat(g) // Poi il Verde
+                byteBuffer.putFloat(r) // Infine il Rosso
             }
         }
-        // -----------------------------------------------------------------
+        byteBuffer.rewind()
 
         // 2. Prepariamo la maschera per ricevere i risultati (formato 1x256x256x1)
         val outputMask = Array(1) { Array(256) { Array(256) { FloatArray(1) } } }
@@ -75,26 +78,43 @@ class AILesionDetector(context: Context) {
         var lesionPixelsInMask = 0
         val totalPixelsInMask = 256 * 256
 
-        // Contiamo quanti pixel l'IA ha classificato come psoriasi
-        for (x in 0 until 256) {
-            for (y in 0 until 256) {
-                // > 0.5f significa che l'IA è sicura al 50% o più che si tratti di lesione
-                if (outputMask[0][x][y][0] > 0.5f) {
+        for (y in 0 until 256) {
+            for (x in 0 until 256) {
+                // L'IA ci dice che questo pixel è psoriasi!
+                if (outputMask[0][y][x][0] > 0.5f) {
                     lesionPixelsInMask++
+
+                    // --- EFFETTO EVIDENZIATORE ROSSO ---
+                    // Prendiamo il colore originale della pelle
+                    val originalColor = resultBitmap.getPixel(x, y)
+                    val oldR = android.graphics.Color.red(originalColor)
+                    val oldG = android.graphics.Color.green(originalColor)
+                    val oldB = android.graphics.Color.blue(originalColor)
+
+                    // Creiamo un mix: mescoliamo il rosso puro (255) con il colore originale
+                    val newR = (255 + oldR) / 2
+                    val newG = oldG / 2
+                    val newB = oldB / 2
+
+                    // Dipingiamo il nuovo pixel sulla foto!
+                    resultBitmap.setPixel(x, y, android.graphics.Color.rgb(newR, newG, newB))
                 }
             }
         }
+        android.util.Log.d("DermaBSA_AI", "Pixel Psoriasi Trovati: $lesionPixelsInMask su $totalPixelsInMask")
 
-        // 5. Proporzione rispetto alla foto originale
+        // 5. Calcolo BSA
         val ratio = lesionPixelsInMask.toDouble() / totalPixelsInMask.toDouble()
         val estimatedLesionPixelsInOriginal = (ratio * regionTotalPixels).toInt()
 
-        // 6. Calcolo del risultato BSA tramite il tuo calcolatore
-        return BsaCalculator.calculateLesionBsa(
+        val result = BsaCalculator.calculateLesionBsa(
             region = region,
             lesionAreaPixels = estimatedLesionPixelsInOriginal,
             regionTotalAreaPixels = regionTotalPixels
         )
+
+        // 6. RESTITUIAMO ENTRAMBI (Risultato matematico e Foto colorata)
+        return Pair(result, resultBitmap)
     }
 
     // Ricordiamoci di liberare la memoria quando non serve più!
