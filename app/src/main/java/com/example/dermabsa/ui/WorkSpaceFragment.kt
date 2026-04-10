@@ -6,11 +6,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.dermabsa.R
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import com.example.dermabsa.model.BodyRegion
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
+import androidx.fragment.app.activityViewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
@@ -29,6 +33,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     // Variabile per memorizzare la zona scelta
+    private val viewModel: MainViewModel by activityViewModels()
+
     private var selectedRegion: BodyRegion? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,28 +131,38 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         val btnConferma = view.findViewById<MaterialButton>(R.id.btn_conferma)
 
         btnConferma.setOnClickListener {
-            val options = arrayOf("Scatta una foto", " Seleziona dalla galleria")
+            // Controlla che la zona sia stata scelta!
+            if (selectedRegion == null) {
+                Toast.makeText(requireContext(), "Seleziona una zona prima di continuare", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener // Blocca l'esecuzione qui
+            }
 
-            com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            // Salva la zona nel ViewModel
+            viewModel.selectedRegion.value = selectedRegion
+            val bundle = bundleOf("REGION_KEY" to selectedRegion!!.name)
+
+            val options = arrayOf("Scatta una foto", "Seleziona dalla galleria")
+
+            MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Scegli sorgente immagine")
                 .setItems(options) { dialog, which ->
                     when (which) {
                         0 -> {
-                            com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                            MaterialAlertDialogBuilder(requireContext())
                                 .setTitle("Ricorda bene")
                                 .setMessage("Per aiutare l'AI a valutare correttamente la psoriasi, assicurati di:\n\n" +
                                         "•  Avere un'ottima illuminazione (luce naturale o molto chiara).\n\n" +
                                         "•  Usare uno sfondo neutro e pulito dietro di te.\n\n" +
                                         "•  Tenere il telefono fermo per una messa a fuoco nitida.")
                                 .setPositiveButton("Ho capito, procedi") { innerDialog, _ ->
-                                    findNavController().navigate(R.id.action_workspace_to_camera)
+                                    // Andiamo alla fotocamera e passiamo il bundle!
+                                    findNavController().navigate(R.id.action_workspace_to_camera, bundle)
                                 }
                                 .setNegativeButton("Annulla", null)
                                 .show()
                         }
                         1 -> {
-                            // HA SCELTO "GALLERIA"
-                            // Invece di navigare alla cieca, apriamo la galleria sicura:
+                            // Apre la galleria sicura
                             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                         }
                     }
