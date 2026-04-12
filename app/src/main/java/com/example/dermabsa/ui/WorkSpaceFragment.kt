@@ -65,18 +65,8 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
     }
 
-    // Variabile per memorizzare la zona scelta
-    private val viewModel: MainViewModel by activityViewModels()
-
-    private var selectedRegion: BodyRegion? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
-        btnBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
 
         // Il TextView che mostra il testo a schermo
         val tvZonaSelezionata = view.findViewById<TextView>(R.id.tv_zona_selezionata)
@@ -130,16 +120,16 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
 
         // AVAMBRACCIA
-        view.findViewById<View>(R.id.btn_forearm_l_f).setOnClickListener {
+        view.findViewById<View>(R.id.btn_fore_arm_l_f).setOnClickListener {
             seleziona(BodyRegion.FOREARM_LEFT_FRONT, "Avambraccio Sinistro Ant. (1.5%)", tvZonaSelezionata)
         }
-        view.findViewById<View>(R.id.btn_forearm_r_f).setOnClickListener {
+        view.findViewById<View>(R.id.btn_fore_arm_r_f).setOnClickListener {
             seleziona(BodyRegion.FOREARM_RIGHT_FRONT, "Avambraccio Destro Ant. (1.5%)", tvZonaSelezionata)
         }
-        view.findViewById<View>(R.id.btn_forearm_l_b).setOnClickListener {
+        view.findViewById<View>(R.id.btn_fore_arm_l_b).setOnClickListener {
             seleziona(BodyRegion.FOREARM_LEFT_BACK, "Avambraccio Sinistro Post. (1.5%)", tvZonaSelezionata)
         }
-        view.findViewById<View>(R.id.btn_forearm_r_b).setOnClickListener {
+        view.findViewById<View>(R.id.btn_fore_arm_r_b).setOnClickListener {
             seleziona(BodyRegion.FOREARM_RIGHT_BACK, "Avambraccio Destro Post. (1.5%)", tvZonaSelezionata)
         }
 
@@ -183,13 +173,13 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         }
 
         // GAMBE (STINCHI/POLPACCI)
-        view.findViewById<View>(R.id.btn_leg_l_f).setOnClickListener {
+        view.findViewById<View>(R.id.btn_leg_left_f).setOnClickListener {
             seleziona(BodyRegion.LOWER_LEG_LEFT_FRONT, "Gamba Sinistra Ant. (4%)", tvZonaSelezionata)
         }
         view.findViewById<View>(R.id.btn_leg_r_f).setOnClickListener {
             seleziona(BodyRegion.LOWER_LEG_RIGHT_FRONT, "Gamba Destra Ant. (4%)", tvZonaSelezionata)
         }
-        view.findViewById<View>(R.id.btn_leg_l_b).setOnClickListener {
+        view.findViewById<View>(R.id.btn_leg_left_b).setOnClickListener {
             seleziona(BodyRegion.LOWER_LEG_LEFT_BACK, "Gamba Sinistra Post. (4%)", tvZonaSelezionata)
         }
         view.findViewById<View>(R.id.btn_leg_r_b).setOnClickListener {
