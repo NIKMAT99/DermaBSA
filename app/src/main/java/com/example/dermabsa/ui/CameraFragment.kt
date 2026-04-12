@@ -99,7 +99,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             viewModel.selectedRegion.value = BodyRegion.CHEST
         }
 
-        when (regioneScelta) {
+       /* when (regioneScelta) {
             "HEAD_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_head_f)
             "HEAD_BACK" -> overlayImg.setImageResource(R.drawable.overlay_head_b)
             "TRUNK_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_petto_f)
@@ -117,6 +117,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             "GENITALS" -> overlayImg.setImageResource(R.drawable.overlay_gen)
             else -> overlayImg.setImageResource(R.drawable.overlay_gen)
         }
+        */
     }
 
     private fun startCamera() {

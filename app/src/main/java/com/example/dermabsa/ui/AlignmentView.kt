@@ -37,7 +37,7 @@ class AlignmentView @JvmOverloads constructor(
         }
     })
 
-    fun setImages(map: Bitmap, photo: Bitmap) {
+    fun setImages(map: Bitmap?, photo: Bitmap) {
         mapBitmap = map
         patientPhotoBitmap = photo
         invalidate()

@@ -216,17 +216,6 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             viewModel.selectedRegion.value = selectedRegion
             val bundle = bundleOf("REGION_KEY" to selectedRegion!!.name)
 
-            val options = arrayOf("Scatta una foto", "Seleziona dalla galleria")
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Sorgente Immagine")
-                .setItems(arrayOf("Fotocamera", "Galleria")) { _, which ->
-                    when (which) {
-                        0 -> findNavController().navigate(R.id.action_workspace_to_camera, bundle)
-                        1 -> pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    }
-                }.show()
-            // QUI CHIAMIAMO LA NOSTRA NUOVA FUNZIONE!
             mostraConsigli(bundle)
         }
 

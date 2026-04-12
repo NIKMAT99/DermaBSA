@@ -39,7 +39,7 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
         // --- NOVITÀ: CARICHIAMO L'OUTLINE CORRETTO IN BASE ALLA ZONA ---
         val region = viewModel.selectedRegion.value
-        val overlayResId = when (region) {
+     /*  val overlayResId = when (region) {
             // TESTA E COLLO
             BodyRegion.HEAD_FRONT -> R.drawable.overlay_head_f
             BodyRegion.HEAD_BACK -> R.drawable.overlay_head_b
@@ -97,12 +97,12 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         }
 
         guideOverlay.setImageResource(overlayResId)
+    */
 
         // Carichiamo la foto nella Custom View (il livello sottostante)
         val photo = viewModel.patientPhoto.value
         if (photo != null) {
-            val emptyMap = BitmapFactory.decodeResource(resources, R.drawable.body_front)
-            alignmentView.setImages(emptyMap, photo)
+            alignmentView.setImages(null, photo)
         } else {
             Snackbar.make(requireView(), "Errore: Foto non trovata", Snackbar.LENGTH_LONG)
                 .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_text_dark))
