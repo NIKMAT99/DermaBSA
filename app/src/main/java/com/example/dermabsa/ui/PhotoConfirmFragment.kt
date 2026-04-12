@@ -131,19 +131,20 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         btnRotate.setOnClickListener {
             val currentPhoto = viewModel.patientPhoto.value
             if (currentPhoto != null) {
-                // 1. Creiamo la matrice matematica per girare di 90 gradi
+                // 1. Creiamo la matrice per girare di 90 gradi
                 val matrix = android.graphics.Matrix()
                 matrix.postRotate(90f)
 
-                // 2. Creiamo una copia esatta della foto, ma ruotata!
+                // 2. Creiamo la foto ruotata
                 val rotatedPhoto = Bitmap.createBitmap(
                     currentPhoto, 0, 0, currentPhoto.width, currentPhoto.height, matrix, true
                 )
 
-                // 3. Aggiorniamo la memoria e diciamo alla Custom View di ricaricare tutto
+                // 3. Aggiorniamo il ViewModel
                 viewModel.patientPhoto.value = rotatedPhoto
-                val emptyMap = BitmapFactory.decodeResource(resources, R.drawable.body_front)
-                alignmentView.setImages(emptyMap, rotatedPhoto)
+
+                // 4. Aggiorniamo la vista passando NULL al posto della sagoma bianca
+                alignmentView.setImages(null, rotatedPhoto)
             }
         }
 
