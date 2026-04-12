@@ -76,7 +76,33 @@ class AILesionDetector(context: Context) {
 
         // 4. Analisi dei risultati
         var lesionPixelsInMask = 0
-        val totalPixelsInMask = 256 * 256
+        // --- IL FIX MAGICO PER SFONDO E ZOOM (AGGIORNATO LUND-BROWDER) ---
+        val bodyCoveragePercentage = when (region) {
+            BodyRegion.CHEST, BodyRegion.UPPER_BACK -> 0.70
+            BodyRegion.ABDOMEN, BodyRegion.LOWER_BACK -> 0.55
+
+            BodyRegion.THIGH_LEFT_FRONT, BodyRegion.THIGH_RIGHT_FRONT,
+            BodyRegion.THIGH_LEFT_BACK, BodyRegion.THIGH_RIGHT_BACK,
+            BodyRegion.LOWER_LEG_LEFT_FRONT, BodyRegion.LOWER_LEG_RIGHT_FRONT,
+            BodyRegion.LOWER_LEG_LEFT_BACK, BodyRegion.LOWER_LEG_RIGHT_BACK,
+            BodyRegion.BUTTOCK_LEFT, BodyRegion.BUTTOCK_RIGHT -> 0.40 // Gambe e glutei
+
+            BodyRegion.HEAD_FRONT, BodyRegion.HEAD_BACK -> 0.35 // Testa
+
+            BodyRegion.UPPER_ARM_LEFT_FRONT, BodyRegion.UPPER_ARM_RIGHT_FRONT,
+            BodyRegion.UPPER_ARM_LEFT_BACK, BodyRegion.UPPER_ARM_RIGHT_BACK,
+            BodyRegion.FOREARM_LEFT_FRONT, BodyRegion.FOREARM_RIGHT_FRONT,
+            BodyRegion.FOREARM_LEFT_BACK, BodyRegion.FOREARM_RIGHT_BACK -> 0.30 // Braccia sottili
+
+            BodyRegion.HAND_LEFT_FRONT, BodyRegion.HAND_RIGHT_FRONT,
+            BodyRegion.HAND_LEFT_BACK, BodyRegion.HAND_RIGHT_BACK,
+            BodyRegion.FOOT_LEFT_FRONT, BodyRegion.FOOT_RIGHT_FRONT,
+            BodyRegion.FOOT_LEFT_BACK, BodyRegion.FOOT_RIGHT_BACK -> 0.40 // Mani e piedi (zoomati)
+
+            BodyRegion.NECK_FRONT, BodyRegion.NECK_BACK, BodyRegion.GENITALS -> 0.20 // Zone piccole
+        }
+
+        val bodyPixelsInMask = (256 * 256 * bodyCoveragePercentage).toInt()
 
         for (y in 0 until 256) {
             for (x in 0 until 256) {
@@ -101,10 +127,10 @@ class AILesionDetector(context: Context) {
                 }
             }
         }
-        android.util.Log.d("DermaBSA_AI", "Pixel Psoriasi Trovati: $lesionPixelsInMask su $totalPixelsInMask")
-
+        android.util.Log.d("DermaBSA_AI", "Pixel Psoriasi Trovati: $lesionPixelsInMask su $bodyPixelsInMask (Pixel Corpo Stimati)")
         // 5. Calcolo BSA
-        val ratio = lesionPixelsInMask.toDouble() / totalPixelsInMask.toDouble()
+        val ratio = (lesionPixelsInMask.toDouble() / bodyPixelsInMask.toDouble()).coerceAtMost(1.0)
+
         val estimatedLesionPixelsInOriginal = (ratio * regionTotalPixels).toInt()
 
         val result = BsaCalculator.calculateLesionBsa(

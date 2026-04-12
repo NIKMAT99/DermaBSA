@@ -3,44 +3,45 @@ package com.example.dermabsa.utils
 import com.example.dermabsa.model.BodyRegion
 import com.example.dermabsa.model.BsaResult
 
-/**
- * Motore di calcolo per stimare la percentuale di superficie corporea (BSA) coinvolta.
- */
 object BsaCalculator {
-
-    /**
-     * Calcola la BSA della lesione basandosi sull'area in pixel.
-     * * @param region Il distretto anatomico selezionato (es. Schiena al 13%).
-     * @param lesionAreaPixels I pixel totali evidenziati come lesione.
-     * @param regionTotalAreaPixels I pixel totali che compongono il distretto anatomico nell'immagine.
-     * @return Un oggetto BsaResult con i dati completi.
-     */
-    fun calculateLesionBsa(
-        region: BodyRegion,
-        lesionAreaPixels: Int,
-        regionTotalAreaPixels: Int
-    ): BsaResult {
-
-        // Gestione degli errori: preveniamo divisioni per zero o dati sballati
-        if (regionTotalAreaPixels <= 0) {
-            throw IllegalArgumentException("L'area totale del distretto deve essere maggiore di zero.")
+    fun getRegionPercentage(region: BodyRegion): Double {
+        return when (region) {
+            BodyRegion.HEAD_FRONT, BodyRegion.HEAD_BACK -> 3.5
+            BodyRegion.NECK_FRONT, BodyRegion.NECK_BACK -> 1.0
+            BodyRegion.CHEST, BodyRegion.ABDOMEN -> 6.5
+            BodyRegion.UPPER_BACK, BodyRegion.LOWER_BACK -> 6.5
+            BodyRegion.UPPER_ARM_LEFT_FRONT, BodyRegion.UPPER_ARM_RIGHT_FRONT,
+            BodyRegion.UPPER_ARM_LEFT_BACK, BodyRegion.UPPER_ARM_RIGHT_BACK -> 2.0
+            BodyRegion.FOREARM_LEFT_FRONT, BodyRegion.FOREARM_RIGHT_FRONT,
+            BodyRegion.FOREARM_LEFT_BACK, BodyRegion.FOREARM_RIGHT_BACK -> 1.5
+            BodyRegion.HAND_LEFT_FRONT, BodyRegion.HAND_RIGHT_FRONT,
+            BodyRegion.HAND_LEFT_BACK, BodyRegion.HAND_RIGHT_BACK -> 1.25
+            BodyRegion.GENITALS -> 1.0
+            BodyRegion.BUTTOCK_LEFT, BodyRegion.BUTTOCK_RIGHT -> 2.5
+            BodyRegion.THIGH_LEFT_FRONT, BodyRegion.THIGH_RIGHT_FRONT,
+            BodyRegion.THIGH_LEFT_BACK, BodyRegion.THIGH_RIGHT_BACK -> 4.5
+            BodyRegion.LOWER_LEG_LEFT_FRONT, BodyRegion.LOWER_LEG_RIGHT_FRONT,
+            BodyRegion.LOWER_LEG_LEFT_BACK, BodyRegion.LOWER_LEG_RIGHT_BACK -> 4.0
+            BodyRegion.FOOT_LEFT_FRONT, BodyRegion.FOOT_RIGHT_FRONT,
+            BodyRegion.FOOT_LEFT_BACK, BodyRegion.FOOT_RIGHT_BACK -> 1.5
         }
-        if (lesionAreaPixels < 0 || lesionAreaPixels > regionTotalAreaPixels) {
-            throw IllegalArgumentException("L'area della lesione non è valida rispetto all'area totale.")
+    }
+
+    fun calculateLesionBsa(region: BodyRegion, lesionAreaPixels: Int, regionTotalAreaPixels: Int): BsaResult {
+        val regionMaxBsa = getRegionPercentage(region)
+        val coverageFraction = if (regionTotalAreaPixels > 0) {
+            lesionAreaPixels.toDouble() / regionTotalAreaPixels.toDouble()
+        } else {
+            0.0
         }
 
-        // 1. Calcolo del rapporto tra l'area della lesione e l'area del distretto
-        val areaRatio = lesionAreaPixels.toDouble() / regionTotalAreaPixels.toDouble()
+        val calculatedBsa = coverageFraction * regionMaxBsa
 
-        // 2. Calcolo della percentuale finale applicando la Rule of Nines
-        val finalPercentage = region.bsaPercentage * areaRatio
-
-        // 3. Restituiamo il risultato pacchettizzato per la UI
         return BsaResult(
             region = region,
             lesionAreaPixels = lesionAreaPixels,
             regionTotalAreaPixels = regionTotalAreaPixels,
-            finalInvolvedPercentage = finalPercentage
+            finalInvolvedPercentage = calculatedBsa.coerceAtMost(regionMaxBsa)
         )
     }
 }

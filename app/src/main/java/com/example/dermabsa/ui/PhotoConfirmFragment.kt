@@ -10,14 +10,8 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.dermabsa.ui.AlignmentView
-import com.example.dermabsa.utils.AILesionDetector
 import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import android.graphics.Bitmap
 import androidx.core.content.ContextCompat
 import com.example.dermabsa.model.BodyRegion
@@ -46,25 +40,62 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         // --- NOVITÀ: CARICHIAMO L'OUTLINE CORRETTO IN BASE ALLA ZONA ---
         val region = viewModel.selectedRegion.value
         val overlayResId = when (region) {
+            // TESTA E COLLO
             BodyRegion.HEAD_FRONT -> R.drawable.overlay_head_f
             BodyRegion.HEAD_BACK -> R.drawable.overlay_head_b
-            BodyRegion.ARM_LEFT_FRONT -> R.drawable.overlay_arm_fsx
-            BodyRegion.ARM_RIGHT_FRONT -> R.drawable.overlay_arm_fdx
-            BodyRegion.ARM_LEFT_BACK -> R.drawable.overlay_arm_bsx
-            BodyRegion.ARM_RIGHT_BACK -> R.drawable.overlay_arm_bdx
-            BodyRegion.TRUNK_FRONT -> R.drawable.overlay_petto_f
-            BodyRegion.UPPER_BACK -> R.drawable.overlay_tronco_b
-            BodyRegion.ABDOMEN -> R.drawable.overlay_addome_f
-            BodyRegion.LOWER_BACK -> R.drawable.overlay_lower_b
+            BodyRegion.NECK_FRONT -> R.drawable.overlay_neck_f
+            BodyRegion.NECK_BACK -> R.drawable.overlay_neck_b
+
+            // TRONCO DIVISO
+            BodyRegion.CHEST -> R.drawable.overlay_chest_f
+            BodyRegion.ABDOMEN -> R.drawable.overlay_abdomen_f
+            BodyRegion.UPPER_BACK -> R.drawable.overlay_upper_back_b
+            BodyRegion.LOWER_BACK -> R.drawable.overlay_lower_back_b
+
+            // BRACCIA SUPERIORI
+            BodyRegion.UPPER_ARM_LEFT_FRONT -> R.drawable.overlay_upper_arm_fsx
+            BodyRegion.UPPER_ARM_RIGHT_FRONT -> R.drawable.overlay_upper_arm_fdx
+            BodyRegion.UPPER_ARM_LEFT_BACK -> R.drawable.overlay_upper_arm_bsx
+            BodyRegion.UPPER_ARM_RIGHT_BACK -> R.drawable.overlay_upper_arm_bdx
+
+            // AVAMBRACCIA
+            BodyRegion.FOREARM_LEFT_FRONT -> R.drawable.overlay_forearm_fsx
+            BodyRegion.FOREARM_RIGHT_FRONT -> R.drawable.overlay_forearm_fdx
+            BodyRegion.FOREARM_LEFT_BACK -> R.drawable.overlay_forearm_bsx
+            BodyRegion.FOREARM_RIGHT_BACK -> R.drawable.overlay_forearm_bdx
+
+            // MANI
+            BodyRegion.HAND_LEFT_FRONT -> R.drawable.overlay_hand_fsx
+            BodyRegion.HAND_RIGHT_FRONT -> R.drawable.overlay_hand_fdx
+            BodyRegion.HAND_LEFT_BACK -> R.drawable.overlay_hand_bsx
+            BodyRegion.HAND_RIGHT_BACK -> R.drawable.overlay_hand_bdx
+
+            // GENITALI E GLUTEI
             BodyRegion.GENITALS -> R.drawable.overlay_gen
-            BodyRegion.LEG_LEFT_FRONT -> R.drawable.overlay_leg_fsx
-            BodyRegion.LEG_LEFT_BACK -> R.drawable.overlay_leg_bsx
-            BodyRegion.LEG_RIGHT_FRONT -> R.drawable.overlay_leg_fdx
-            BodyRegion.LEG_RIGHT_BACK -> R.drawable.overlay_leg_bdx
-            else -> R.drawable.body_front
+            BodyRegion.BUTTOCK_LEFT -> R.drawable.overlay_buttock_sx
+            BodyRegion.BUTTOCK_RIGHT -> R.drawable.overlay_buttock_dx
+
+            // COSCE
+            BodyRegion.THIGH_LEFT_FRONT -> R.drawable.overlay_thigh_fsx
+            BodyRegion.THIGH_RIGHT_FRONT -> R.drawable.overlay_thigh_fdx
+            BodyRegion.THIGH_LEFT_BACK -> R.drawable.overlay_thigh_bsx
+            BodyRegion.THIGH_RIGHT_BACK -> R.drawable.overlay_thigh_bdx
+
+            // GAMBE (STINCHI/POLPACCI)
+            BodyRegion.LOWER_LEG_LEFT_FRONT -> R.drawable.overlay_lower_leg_fsx
+            BodyRegion.LOWER_LEG_RIGHT_FRONT -> R.drawable.overlay_lower_leg_fdx
+            BodyRegion.LOWER_LEG_LEFT_BACK -> R.drawable.overlay_lower_leg_bsx
+            BodyRegion.LOWER_LEG_RIGHT_BACK -> R.drawable.overlay_lower_leg_bdx
+
+            // PIEDI
+            BodyRegion.FOOT_LEFT_FRONT -> R.drawable.overlay_foot_fsx
+            BodyRegion.FOOT_RIGHT_FRONT -> R.drawable.overlay_foot_fdx
+            BodyRegion.FOOT_LEFT_BACK -> R.drawable.overlay_foot_bsx
+            BodyRegion.FOOT_RIGHT_BACK -> R.drawable.overlay_foot_bdx
+
+            else -> R.drawable.body_front // Fallback di sicurezza
         }
 
-        // Assegniamo la sagoma al livello trasparente dello slider!
         guideOverlay.setImageResource(overlayResId)
 
         // Carichiamo la foto nella Custom View (il livello sottostante)

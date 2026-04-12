@@ -96,7 +96,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             viewModel.selectedRegion.value = BodyRegion.valueOf(regioneScelta)
         } catch (e: Exception) {
             // Se per caso c'è un errore di battitura, mettiamo il tronco di default per non far crashare l'app
-            viewModel.selectedRegion.value = BodyRegion.TRUNK_FRONT
+            viewModel.selectedRegion.value = BodyRegion.CHEST
         }
 
         when (regioneScelta) {

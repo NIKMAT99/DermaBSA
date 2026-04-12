@@ -1,19 +1,17 @@
 package com.example.dermabsa.model
 
-enum class BodyRegion(val displayName: String, val bsaPercentage: Double) {
-    HEAD_FRONT("Testa davanti", 4.5), // [cite: 60]
-    HEAD_BACK("Testa dietro", 4.5),
-    ARM_LEFT_FRONT("Braccio Sinistro davanti", 4.5), // [cite: 61]
-    ARM_RIGHT_FRONT("Braccio Destro davanti", 4.5), // [cite: 61]
-    ARM_LEFT_BACK("Braccio Sinistro dietro", 4.5), // [cite: 61]
-    ARM_RIGHT_BACK("Braccio Destro dietro", 4.5), // [cite: 61]
-    LEG_LEFT_FRONT("Gamba Sinistra davanti", 9.0), // [cite: 62]
-    LEG_RIGHT_FRONT("Gamba Destra davanti", 9.0), // [cite: 62]
-    LEG_LEFT_BACK("Gamba Sinistra dietro", 9.0), // [cite: 62]
-    LEG_RIGHT_BACK("Gamba Destra dietro", 9.0), // [cite: 62]
-    TRUNK_FRONT("Tronco davanti", 9.0), // [cite: 63]
-    ABDOMEN("Addome",9.0),
-    UPPER_BACK("Tronco Posteriore", 9.0),
-    LOWER_BACK("Lombare",9.0),
-    GENITALS("Genitali", 1.0)
+enum class BodyRegion {
+    HEAD_FRONT, HEAD_BACK,
+    NECK_FRONT, NECK_BACK,
+
+    CHEST, ABDOMEN,          // Tronco Anteriore diviso
+    UPPER_BACK, LOWER_BACK, // Torace/Addome e Schiena
+    UPPER_ARM_LEFT_FRONT, UPPER_ARM_RIGHT_FRONT, UPPER_ARM_LEFT_BACK, UPPER_ARM_RIGHT_BACK,
+    FOREARM_LEFT_FRONT, FOREARM_RIGHT_FRONT, FOREARM_LEFT_BACK, FOREARM_RIGHT_BACK,
+    HAND_LEFT_FRONT, HAND_RIGHT_FRONT, HAND_LEFT_BACK, HAND_RIGHT_BACK,
+    GENITALS,
+    BUTTOCK_LEFT, BUTTOCK_RIGHT, // Glutei
+    THIGH_LEFT_FRONT, THIGH_RIGHT_FRONT, THIGH_LEFT_BACK, THIGH_RIGHT_BACK, // Cosce
+    LOWER_LEG_LEFT_FRONT, LOWER_LEG_RIGHT_FRONT, LOWER_LEG_LEFT_BACK, LOWER_LEG_RIGHT_BACK, // Gambe/Stinchi
+    FOOT_LEFT_FRONT, FOOT_RIGHT_FRONT, FOOT_LEFT_BACK, FOOT_RIGHT_BACK
 }

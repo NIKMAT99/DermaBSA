@@ -1,34 +1,36 @@
 package com.example.dermabsa.ui
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import com.example.dermabsa.R
 import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.content.ContextCompat
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
-import com.example.dermabsa.model.BodyRegion
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.button.MaterialButton
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.example.dermabsa.R
+import com.example.dermabsa.model.BodyRegion
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 
 class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
+    private val viewModel: MainViewModel by activityViewModels()
+    private var selectedRegion: BodyRegion? = null
+
+    // Selettore Galleria con Fix per memoria e visibilità
     private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
         if (uri != null) {
             try {
-                // 1. Caricamento della foto forzando il formato "Software" per renderla visibile
                 val bitmap: Bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     val source = ImageDecoder.createSource(requireContext().contentResolver, uri)
                     ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
@@ -40,18 +42,13 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                     MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
                 }
 
-                // 2. Rimpiccioliamo l'immagine per non esaurire la memoria RAM (Max 1024px)
-                val maxDimension = 1024
-                val scale = Math.min(maxDimension.toFloat() / bitmap.width, maxDimension.toFloat() / bitmap.height)
-                val newWidth = Math.round(bitmap.width * scale)
-                val newHeight = Math.round(bitmap.height * scale)
+                // Ridimensionamento preventivo (max 1024px)
+                val maxDim = 1024
+                val scale = Math.min(maxDim.toFloat() / bitmap.width, maxDim.toFloat() / bitmap.height)
+                val resized = Bitmap.createScaledBitmap(bitmap, (bitmap.width * scale).toInt(), (bitmap.height * scale).toInt(), true)
 
-                val resizedBitmap = Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+                viewModel.patientPhoto.value = resized.copy(Bitmap.Config.ARGB_8888, true)
 
-                // 3. Copiamo in formato ARGB_8888 e salviamo nel ViewModel
-                viewModel.patientPhoto.value = resizedBitmap.copy(Bitmap.Config.ARGB_8888, true)
-
-                // 4. Prepariamo il bundle della zona e navighiamo alla conferma
                 val bundle = bundleOf("REGION_KEY" to selectedRegion?.name)
                 findNavController().navigate(R.id.action_workspace_to_confirm, bundle)
 
@@ -83,91 +80,139 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
         // Il TextView che mostra il testo a schermo
         val tvZonaSelezionata = view.findViewById<TextView>(R.id.tv_zona_selezionata)
+        val btnBack = view.findViewById<ImageButton>(R.id.btn_back)
+        btnBack.setOnClickListener { findNavController().popBackStack() }
 
-        // 1. COLLEGAMENTO DEI BOTTONI
-        val btnHeadF = view.findViewById<View>(R.id.btn_head_f)
-        val btnHeadB = view.findViewById<View>(R.id.btn_head_b)
-        val btnArmLeftF = view.findViewById<View>(R.id.btn_arm_left_f)
-        val btnArmRightF = view.findViewById<View>(R.id.btn_arm_right_f)
-        val btnArmLeftB = view.findViewById<View>(R.id.btn_arm_left_b)
-        val btnArmRightB = view.findViewById<View>(R.id.btn_arm_right_b)
-        val btnTrunkFront = view.findViewById<View>(R.id.btn_trunk_front)
-        val btnUpperBack = view.findViewById<View>(R.id.btn_upper_back)
-        val btnAbdomen = view.findViewById<View>(R.id.btn_abdomen)
-        val btnLowerBack = view.findViewById<View>(R.id.btn_lower_back)
-        val btnGenitals = view.findViewById<View>(R.id.btn_genitals)
-        val btnLegLeftF = view.findViewById<View>(R.id.btn_leg_left_f)
-        val btnLegLeftB = view.findViewById<View>(R.id.btn_leg_left_b)
-        val btnLegRightF = view.findViewById<View>(R.id.btn_leg_right_f)
-        val btnLegRightB = view.findViewById<View>(R.id.btn_leg_right_b)
+        // --- COLLEGAMENTO BOTTONI (LUND E BROWDER) ---
 
-
-        // 2. LISTENER DEI BOTTONI
-        btnHeadF.setOnClickListener {
-            selectedRegion = BodyRegion.HEAD_FRONT
-            aggiornaTesto(tvZonaSelezionata, "Testa anteriore (4.5%)")
+        // TESTA E COLLO
+        view.findViewById<View>(R.id.btn_head_f).setOnClickListener {
+            seleziona(BodyRegion.HEAD_FRONT, "Testa Anteriore (3.5%)", tvZonaSelezionata)
         }
-        btnHeadB.setOnClickListener {
-            selectedRegion = BodyRegion.HEAD_BACK
-            aggiornaTesto(tvZonaSelezionata, "Testa posteriore (4.5%)")
+        view.findViewById<View>(R.id.btn_head_b).setOnClickListener {
+            seleziona(BodyRegion.HEAD_BACK, "Testa Posteriore (3.5%)", tvZonaSelezionata)
         }
-        btnArmLeftF.setOnClickListener {
-            selectedRegion = BodyRegion.ARM_LEFT_FRONT
-            aggiornaTesto(tvZonaSelezionata, "Braccio sinistro anteriore (4.5%)")
+        view.findViewById<View>(R.id.btn_neck_f).setOnClickListener {
+            seleziona(BodyRegion.NECK_FRONT, "Collo Anteriore (1%)", tvZonaSelezionata)
         }
-        btnArmRightF.setOnClickListener {
-            selectedRegion = BodyRegion.ARM_RIGHT_FRONT
-            aggiornaTesto(tvZonaSelezionata, "Braccio destro anteriore (4.5%)")
-        }
-        btnArmLeftB.setOnClickListener {
-            selectedRegion = BodyRegion.ARM_LEFT_BACK
-            aggiornaTesto(tvZonaSelezionata, "Braccio sinistro posteriore (4.5%)")
-        }
-        btnArmRightB.setOnClickListener {
-            selectedRegion = BodyRegion.ARM_RIGHT_BACK
-            aggiornaTesto(tvZonaSelezionata, "Braccio destro posteriore (4.5%)")
-        }
-        btnTrunkFront.setOnClickListener {
-            selectedRegion = BodyRegion.TRUNK_FRONT
-            aggiornaTesto(tvZonaSelezionata, "Tronco anteriore (9%)")
-        }
-        btnUpperBack.setOnClickListener {
-            selectedRegion = BodyRegion.UPPER_BACK
-            aggiornaTesto(tvZonaSelezionata, "Tronco posteriore (9%)")
-        }
-        btnAbdomen.setOnClickListener {
-            selectedRegion = BodyRegion.ABDOMEN
-            aggiornaTesto(tvZonaSelezionata, "Addome (9%)")
-        }
-        btnLowerBack.setOnClickListener {
-            selectedRegion = BodyRegion.LOWER_BACK
-            aggiornaTesto(tvZonaSelezionata, "Lombare (9%)")
-        }
-        btnGenitals.setOnClickListener {
-            selectedRegion = BodyRegion.GENITALS
-            aggiornaTesto(tvZonaSelezionata, "Genitali (1%)")
-        }
-        btnLegLeftF.setOnClickListener {
-            selectedRegion = BodyRegion.LEG_LEFT_FRONT
-            aggiornaTesto(tvZonaSelezionata, "Gamba sinistra anteriore (9%)")
-        }
-        btnLegLeftB.setOnClickListener {
-            selectedRegion = BodyRegion.LEG_LEFT_BACK
-            aggiornaTesto(tvZonaSelezionata, "Gamba sinistra posteriore (9%)")
-        }
-        btnLegRightF.setOnClickListener {
-            selectedRegion = BodyRegion.LEG_RIGHT_FRONT
-            aggiornaTesto(tvZonaSelezionata, "Gamba destra anteriore (9%)")
-        }
-        btnLegRightB.setOnClickListener {
-            selectedRegion = BodyRegion.LEG_RIGHT_BACK
-            aggiornaTesto(tvZonaSelezionata, "Gamba destra posteriore (9%)")
+        view.findViewById<View>(R.id.btn_neck_b).setOnClickListener {
+            seleziona(BodyRegion.NECK_BACK, "Collo Posteriore (1%)", tvZonaSelezionata)
         }
 
+        // TRONCO E SCHIENA
+        // Anteriore
+        view.findViewById<View>(R.id.btn_trunk_front).setOnClickListener {
+            seleziona(BodyRegion.CHEST, "Torace (6.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_abdomen).setOnClickListener {
+            seleziona(BodyRegion.ABDOMEN, "Addome (6.5%)", tvZonaSelezionata)
+        }
+        // Posteriore
+        view.findViewById<View>(R.id.btn_upper_back).setOnClickListener {
+            seleziona(BodyRegion.UPPER_BACK, "Schiena Sup. (6.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_lower_back).setOnClickListener {
+            seleziona(BodyRegion.LOWER_BACK, "Schiena Inf. (6.5%)", tvZonaSelezionata)
+        }
+
+        // BRACCIA SUPERIORI
+        view.findViewById<View>(R.id.btn_upper_arm_l_f).setOnClickListener {
+            seleziona(BodyRegion.UPPER_ARM_LEFT_FRONT, "Braccio Sup. Sinistro Ant. (2%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_upper_arm_r_f).setOnClickListener {
+            seleziona(BodyRegion.UPPER_ARM_RIGHT_FRONT, "Braccio Sup. Destro Ant. (2%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_upper_arm_l_b).setOnClickListener {
+            seleziona(BodyRegion.UPPER_ARM_LEFT_BACK, "Braccio Sup. Sinistro Post. (2%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_upper_arm_r_b).setOnClickListener {
+            seleziona(BodyRegion.UPPER_ARM_RIGHT_BACK, "Braccio Sup. Destro Post. (2%)", tvZonaSelezionata)
+        }
+
+        // AVAMBRACCIA
+        view.findViewById<View>(R.id.btn_forearm_l_f).setOnClickListener {
+            seleziona(BodyRegion.FOREARM_LEFT_FRONT, "Avambraccio Sinistro Ant. (1.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_forearm_r_f).setOnClickListener {
+            seleziona(BodyRegion.FOREARM_RIGHT_FRONT, "Avambraccio Destro Ant. (1.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_forearm_l_b).setOnClickListener {
+            seleziona(BodyRegion.FOREARM_LEFT_BACK, "Avambraccio Sinistro Post. (1.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_forearm_r_b).setOnClickListener {
+            seleziona(BodyRegion.FOREARM_RIGHT_BACK, "Avambraccio Destro Post. (1.5%)", tvZonaSelezionata)
+        }
+
+        // MANI
+        view.findViewById<View>(R.id.btn_hand_l_f).setOnClickListener {
+            seleziona(BodyRegion.HAND_LEFT_FRONT, "Mano Sinistra Ant. (1.25%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_hand_r_f).setOnClickListener {
+            seleziona(BodyRegion.HAND_RIGHT_FRONT, "Mano Destra Ant. (1.25%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_hand_l_b).setOnClickListener {
+            seleziona(BodyRegion.HAND_LEFT_BACK, "Mano Sinistra Post. (1.25%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_hand_r_b).setOnClickListener {
+            seleziona(BodyRegion.HAND_RIGHT_BACK, "Mano Destra Post. (1.25%)", tvZonaSelezionata)
+        }
+
+        // GENITALI E GLUTEI
+        view.findViewById<View>(R.id.btn_genitals).setOnClickListener {
+            seleziona(BodyRegion.GENITALS, "Genitali (1%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_buttock_l).setOnClickListener {
+            seleziona(BodyRegion.BUTTOCK_LEFT, "Gluteo Sinistro (2.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_buttock_r).setOnClickListener {
+            seleziona(BodyRegion.BUTTOCK_RIGHT, "Gluteo Destro (2.5%)", tvZonaSelezionata)
+        }
+
+        // COSCE
+        view.findViewById<View>(R.id.btn_thigh_l_f).setOnClickListener {
+            seleziona(BodyRegion.THIGH_LEFT_FRONT, "Coscia Sinistra Ant. (4.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_thigh_r_f).setOnClickListener {
+            seleziona(BodyRegion.THIGH_RIGHT_FRONT, "Coscia Destra Ant. (4.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_thigh_l_b).setOnClickListener {
+            seleziona(BodyRegion.THIGH_LEFT_BACK, "Coscia Sinistra Post. (4.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_thigh_r_b).setOnClickListener {
+            seleziona(BodyRegion.THIGH_RIGHT_BACK, "Coscia Destra Post. (4.5%)", tvZonaSelezionata)
+        }
+
+        // GAMBE (STINCHI/POLPACCI)
+        view.findViewById<View>(R.id.btn_leg_l_f).setOnClickListener {
+            seleziona(BodyRegion.LOWER_LEG_LEFT_FRONT, "Gamba Sinistra Ant. (4%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_leg_r_f).setOnClickListener {
+            seleziona(BodyRegion.LOWER_LEG_RIGHT_FRONT, "Gamba Destra Ant. (4%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_leg_l_b).setOnClickListener {
+            seleziona(BodyRegion.LOWER_LEG_LEFT_BACK, "Gamba Sinistra Post. (4%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_leg_r_b).setOnClickListener {
+            seleziona(BodyRegion.LOWER_LEG_RIGHT_BACK, "Gamba Destra Post. (4%)", tvZonaSelezionata)
+        }
+
+        // PIEDI
+        view.findViewById<View>(R.id.btn_foot_l_f).setOnClickListener {
+            seleziona(BodyRegion.FOOT_LEFT_FRONT, "Piede Sinistro Ant. (1.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_foot_r_f).setOnClickListener {
+            seleziona(BodyRegion.FOOT_RIGHT_FRONT, "Piede Destro Ant. (1.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_foot_l_b).setOnClickListener {
+            seleziona(BodyRegion.FOOT_LEFT_BACK, "Piede Sinistro Post. (1.5%)", tvZonaSelezionata)
+        }
+        view.findViewById<View>(R.id.btn_foot_r_b).setOnClickListener {
+            seleziona(BodyRegion.FOOT_RIGHT_BACK, "Piede Destro Post. (1.5%)", tvZonaSelezionata)
+        }
+
+        // --- LOGICA DI CONFERMA E NAVIGAZIONE ---
         val btnConferma = view.findViewById<MaterialButton>(R.id.btn_conferma)
-
         btnConferma.setOnClickListener {
-            // Controlla che la zona sia stata scelta!
             if (selectedRegion == null) {
                 // ECCO LA NUOVA SNACKBAR AL POSTO DEL TOAST
                 Snackbar.make(requireView(), "Seleziona una zona prima di continuare", Snackbar.LENGTH_SHORT)
@@ -178,10 +223,19 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
                 return@setOnClickListener // Blocca l'esecuzione qui
             }
 
-            // Salva la zona nel ViewModel e crea il bundle
             viewModel.selectedRegion.value = selectedRegion
             val bundle = bundleOf("REGION_KEY" to selectedRegion!!.name)
 
+            val options = arrayOf("Scatta una foto", "Seleziona dalla galleria")
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Sorgente Immagine")
+                .setItems(arrayOf("Fotocamera", "Galleria")) { _, which ->
+                    when (which) {
+                        0 -> findNavController().navigate(R.id.action_workspace_to_camera, bundle)
+                        1 -> pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
+                }.show()
             // QUI CHIAMIAMO LA NOSTRA NUOVA FUNZIONE!
             mostraConsigli(bundle)
         }
@@ -209,14 +263,12 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             tabRetro.setBackgroundResource(R.drawable.bg_toggle_selected)
             tabFronte.setBackgroundResource(R.drawable.bg_hotspot)
         }
-    } // <-- FINE DI onViewCreated (nota come si chiude qui!)
+    }
 
-    // --- LE NOSTRE FUNZIONI DI SUPPORTO (Tutte fuori da onViewCreated) ---
-
-    // Funzione di utilità per non ripetere il codice
-    private fun aggiornaTesto(textView: TextView, testo: String) {
-        textView.text = "Zona selezionata: $testo"
-        textView.visibility = View.VISIBLE
+    private fun seleziona(region: BodyRegion, nome: String, tv: TextView) {
+        selectedRegion = region
+        tv.text = "Zona: $nome"
+        tv.visibility = View.VISIBLE
     }
 
     private fun mostraConsigli(bundle: Bundle) {
