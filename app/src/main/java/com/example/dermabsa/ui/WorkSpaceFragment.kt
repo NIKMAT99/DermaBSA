@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import com.example.dermabsa.R
 import android.widget.ImageButton
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.content.ContextCompat
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
@@ -55,7 +57,11 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(requireContext(), "Errore elaborazione immagine", Toast.LENGTH_SHORT).show()
+                // NUOVA SNACKBAR PER ERRORE GALLERIA
+                Snackbar.make(requireView(), "Errore durante l'elaborazione dell'immagine", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_text_dark))
+                    .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    .show()
             }
         } else {
             // L'utente ha chiuso la galleria senza scegliere nulla
@@ -96,7 +102,7 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         val btnLegRightB = view.findViewById<View>(R.id.btn_leg_right_b)
 
 
-        // 2. LISTENER DEI BOTTONI (Puliti dai Toast)
+        // 2. LISTENER DEI BOTTONI
         btnHeadF.setOnClickListener {
             selectedRegion = BodyRegion.HEAD_FRONT
             aggiornaTesto(tvZonaSelezionata, "Testa anteriore (4.5%)")
@@ -163,41 +169,21 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
         btnConferma.setOnClickListener {
             // Controlla che la zona sia stata scelta!
             if (selectedRegion == null) {
-                Toast.makeText(requireContext(), "Seleziona una zona prima di continuare", Toast.LENGTH_SHORT).show()
+                // ECCO LA NUOVA SNACKBAR AL POSTO DEL TOAST
+                Snackbar.make(requireView(), "Seleziona una zona prima di continuare", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_teal))
+                    .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    .show()
+
                 return@setOnClickListener // Blocca l'esecuzione qui
             }
 
-            // Salva la zona nel ViewModel
+            // Salva la zona nel ViewModel e crea il bundle
             viewModel.selectedRegion.value = selectedRegion
             val bundle = bundleOf("REGION_KEY" to selectedRegion!!.name)
 
-            val options = arrayOf("Scatta una foto", "Seleziona dalla galleria")
-
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Scegli sorgente immagine")
-                .setItems(options) { dialog, which ->
-                    when (which) {
-                        0 -> {
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Ricorda bene")
-                                .setMessage("Per aiutare l'AI a valutare correttamente la psoriasi, assicurati di:\n\n" +
-                                        "Avere un'ottima illuminazione (luce naturale o molto chiara).\n\n" +
-                                        "Usare uno sfondo neutro e pulito dietro di te.\n\n" +
-                                        "Tenere il telefono fermo per una messa a fuoco nitida.")
-                                .setPositiveButton("Ho capito!") { innerDialog, _ ->
-                                    // Andiamo alla fotocamera e passiamo il bundle!
-                                    findNavController().navigate(R.id.action_workspace_to_camera, bundle)
-                                }
-                                .setNegativeButton("Annulla", null)
-                                .show()
-                        }
-                        1 -> {
-                            // Apre la galleria sicura
-                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        }
-                    }
-                }
-                .show()
+            // QUI CHIAMIAMO LA NOSTRA NUOVA FUNZIONE!
+            mostraConsigli(bundle)
         }
 
         // --- LOGICA TOGGLE FRONTE/RETRO ---
@@ -223,11 +209,64 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
             tabRetro.setBackgroundResource(R.drawable.bg_toggle_selected)
             tabFronte.setBackgroundResource(R.drawable.bg_hotspot)
         }
-    }
+    } // <-- FINE DI onViewCreated (nota come si chiude qui!)
+
+    // --- LE NOSTRE FUNZIONI DI SUPPORTO (Tutte fuori da onViewCreated) ---
 
     // Funzione di utilità per non ripetere il codice
     private fun aggiornaTesto(textView: TextView, testo: String) {
         textView.text = "Zona selezionata: $testo"
         textView.visibility = View.VISIBLE
     }
+
+    private fun mostraConsigli(bundle: Bundle) {
+        // Gonfiamo (carichiamo) il layout XML che abbiamo appena creato
+        val dialogView = layoutInflater.inflate(R.layout.ic_dialog_info, null)
+
+        // Creiamo un AlertDialog "vuoto" e ci infiliamo dentro il nostro layout
+        val customDialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        // FONDAMENTALE: rende lo sfondo del sistema trasparente per mostrare gli angoli arrotondati
+        customDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Recuperiamo i bottoni dal layout personalizzato
+        val btnUnderstand = dialogView.findViewById<MaterialButton>(R.id.btn_dialog_understand)
+        val btnCancel = dialogView.findViewById<MaterialButton>(R.id.btn_dialog_cancel)
+
+        // Se l'utente clicca "Ho capito" -> Chiudi il pop-up e chiedi da dove prendere la foto
+        btnUnderstand.setOnClickListener {
+            customDialog.dismiss()
+            mostraSceltaSorgente(bundle)
+        }
+
+        // Se l'utente clicca "Annulla" -> Chiudi tutto e non fare nulla
+        btnCancel.setOnClickListener {
+            customDialog.dismiss()
+        }
+
+        customDialog.show()
+    }
+
+    private fun mostraSceltaSorgente(bundle: Bundle) {
+        val options = arrayOf("Fotocamera", "Galleria")
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Scegli sorgente immagine")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> {
+                        // Andiamo direttamente alla fotocamera
+                        findNavController().navigate(R.id.action_workspace_to_camera, bundle)
+                    }
+                    1 -> {
+                        // Apre la galleria
+                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
+                }
+            }
+            .show()
+    }
+
 }

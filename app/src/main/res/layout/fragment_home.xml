@@ -21,10 +21,10 @@
             android:layout_marginBottom="15dp">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="49dp"
+                android:layout_height="49dp"
                 android:src="@drawable/ic_logo_dermabsa"
-                android:padding="8dp" />
+                android:padding="6dp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DermaBSA"
-                    android:textSize="24sp"
+                    android:textSize="27sp"
                     android:textStyle="bold"
                     android:textColor="@color/derma_text_dark"/>
 
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:text="Analisi Psoriasi "
                     android:textColor="@color/derma_text_grey"
-                    android:textSize="15sp" />
+                    android:textSize="17sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -95,6 +95,7 @@
                     android:layout_height="wrap_content"
                     android:text="Seleziona la zona del corpo, scatta una foto e ottieni un'analisi immediata delle lesioni da psoriasi"
                     android:textAlignment="center"
+                    android:textSize="14dp"
                     android:textColor="@color/derma_text_grey"
                     android:layout_marginBottom="24dp"/>
 
@@ -103,7 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:text="Inizia Scansione"
-                    android:textSize="16sp"
+                    android:textSize="17sp"
                     android:textStyle="bold"
                     app:cornerRadius="12dp"
                     android:backgroundTint="@color/derma_teal"/>
@@ -114,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="COME FUNZIONA"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/text_muted"
             android:layout_marginBottom="16dp"/>
@@ -152,13 +153,13 @@
                         android:layout_height="wrap_content"
                         android:text="Seleziona la zona"
                         android:textStyle="bold"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textColor="@color/derma_text_dark"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Tocca la parte del corpo interessata sulla mappa anatomica"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textColor="@color/derma_text_grey"/>
                 </LinearLayout>
             </LinearLayout>
@@ -194,14 +195,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Scatta la foto"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="@color/derma_text_dark"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Fotografa la zona da analizzare allineandola alla guida"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textColor="@color/derma_text_grey"/>
                 </LinearLayout>
             </LinearLayout>
@@ -237,14 +238,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Analisi AI"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textStyle="bold"
                         android:textColor="@color/derma_text_dark"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="L'intelligenza artificiale evidenzia le lesioni e stima l'area affetta"
-                        android:textSize="14sp"
+                        android:textSize="15sp"
                         android:textColor="@color/derma_text_grey"/>
                 </LinearLayout>
             </LinearLayout>
@@ -258,7 +259,18 @@
             app:cardElevation="0dp"
             app:strokeWidth="1dp"
             app:strokeColor="@color/derma_teal_stroke"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="🔒 Privacy Garantita: Le immagini vengono analizzate in tempo reale e non vengono mai salvate o condivise in rete. L'app è progettata come strumento di supporto ad esclusivo uso del personale medico."
+                android:textSize="13sp"
+                android:lineSpacingExtra="2dp"
+                android:textColor="@color/derma_text_dark" />
+
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

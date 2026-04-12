@@ -8,7 +8,7 @@
     <color name="derma_text_dark">#E0E0E0</color>
     <color name="derma_text_grey">#BDBDBD</color>
     <color name="text_muted">#5F5959</color>
-    <color name="camera_bottom_bar">#80000000</color>
+    <color name="camera_bottom_bar">#80FFFFFF</color>
     <color name="card">#5F5959FF</color>
     <color name="panel_background">#1E1E1E</color>
 </resources>

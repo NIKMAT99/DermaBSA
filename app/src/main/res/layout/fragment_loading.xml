@@ -7,55 +7,50 @@
     android:background="@color/white">
 
     <ImageView
-        android:id="@+id/iv_loading_logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/ic_logo_dermabsa"
-        app:layout_constraintBottom_toTopOf="@id/progress_bar_loading"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/iv_scan_silhouette"
+        android:layout_width="220dp"
+        android:layout_height="450dp"
+        android:src="@drawable/body_front"
+        android:alpha="0.2"
+        app:tint="@color/derma_teal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
-
-    <ProgressBar
-        android:id="@+id/progress_bar_loading"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="32dp"
-        android:indeterminateDrawable="@drawable/spinner_gradient"
-        app:layout_constraintBottom_toTopOf="@id/tv_loading_title"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_loading_logo" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.35" />
+
+    <View
+        android:id="@+id/scan_line"
+        android:layout_width="260dp"
+        android:layout_height="3dp"
+        android:background="@color/derma_teal"
+        android:elevation="4dp"
+        app:layout_constraintTop_toTopOf="@id/iv_scan_silhouette"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tv_loading_title"
+        android:id="@+id/tv_loading_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Analisi in corso..."
-        android:textColor="@color/black"
-        android:textSize="22sp"
+        android:text="Inizializzazione AI..."
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/tv_loading_subtitle"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/derma_text_dark"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_scan_silhouette"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress_bar_loading" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/tv_loading_subtitle"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginEnd="40dp"
-        android:text="L'AI sta analizzando l'immagine..."
-        android:textAlignment="center"
-        android:textColor="@color/text_muted"
+        android:text="L'intelligenza artificiale sta analizzando i dati."
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/derma_text_grey"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_loading_status"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_loading_title" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

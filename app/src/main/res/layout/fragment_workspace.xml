@@ -38,6 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seleziona la zona del corpo da analizzare"
+        android:textSize="15sp"
         android:textColor="@color/derma_text_grey"
         app:layout_constraintStart_toStartOf="@id/tv_header_home"
         app:layout_constraintTop_toBottomOf="@id/tv_header_home" />
@@ -94,13 +95,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_conferma"
-        android:layout_width="182dp"
-        android:layout_height="51dp"
+        android:layout_width="124dp"
+        android:layout_height="47dp"
+        android:backgroundTint="@color/derma_teal"
         android:text="Conferma "
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="12dp"
-        android:backgroundTint="@color/derma_teal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -124,16 +125,14 @@
 
             <ImageView
                 android:id="@+id/iv_body_front"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/body_front"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/btn_head_f"
@@ -144,13 +143,44 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_front"
-                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintHeight_percent="0.12"
+                app:layout_constraintHorizontal_bias="0.551"
                 app:layout_constraintStart_toStartOf="@id/iv_body_front"
                 app:layout_constraintTop_toTopOf="@id/iv_body_front"
-                app:layout_constraintVertical_bias="0.04"
-                app:layout_constraintWidth_percent="0.16" />
+                app:layout_constraintVertical_bias="0.075"
+                app:layout_constraintWidth_percent="0.165" />
 
-            <View android:id="@+id/btn_genitals" android:layout_width="0dp" android:layout_height="0dp" app:layout_constraintWidth_percent="0.09"  app:layout_constraintHeight_percent="0.06" android:background="@drawable/bg_hotspot" android:clickable="true" android:focusable="true" app:layout_constraintBottom_toBottomOf="@id/iv_body_front" app:layout_constraintEnd_toEndOf="@id/iv_body_front" app:layout_constraintHorizontal_bias="0.504" app:layout_constraintStart_toStartOf="@id/iv_body_front" app:layout_constraintTop_toTopOf="@id/iv_body_front" app:layout_constraintVertical_bias="0.492" />
+            <View
+                android:id="@+id/btn_neck_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.02"
+                app:layout_constraintHorizontal_bias="0.541"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.191"
+                app:layout_constraintWidth_percent="0.1" />
+
+            <View
+                android:id="@+id/btn_genitals"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.04"
+                app:layout_constraintHorizontal_bias="0.541"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.495"
+                app:layout_constraintWidth_percent="0.1" />
 
             <View
                 android:id="@+id/btn_abdomen"
@@ -161,11 +191,11 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_front"
-                app:layout_constraintHeight_percent="0.13"
-                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintHeight_percent="0.105"
+                app:layout_constraintHorizontal_bias="0.545"
                 app:layout_constraintStart_toStartOf="@id/iv_body_front"
                 app:layout_constraintTop_toTopOf="@id/iv_body_front"
-                app:layout_constraintVertical_bias="0.383"
+                app:layout_constraintVertical_bias="0.412"
                 app:layout_constraintWidth_percent="0.24" />
 
             <View
@@ -177,12 +207,12 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_front"
-                app:layout_constraintHeight_percent="0.12"
-                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintHeight_percent="0.16"
+                app:layout_constraintHorizontal_bias="0.555"
                 app:layout_constraintStart_toStartOf="@id/iv_body_front"
                 app:layout_constraintTop_toTopOf="@id/iv_body_front"
-                app:layout_constraintVertical_bias="0.242"
-                app:layout_constraintWidth_percent="0.26" />
+                app:layout_constraintVertical_bias="0.252"
+                app:layout_constraintWidth_percent="0.255" />
 
             <View
                 android:id="@+id/btn_leg_left_f"
@@ -193,15 +223,15 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_front"
-                app:layout_constraintHeight_percent="0.43"
-                app:layout_constraintHorizontal_bias="0.639"
+                app:layout_constraintHeight_percent="0.16"
+                app:layout_constraintHorizontal_bias="0.657"
                 app:layout_constraintStart_toStartOf="@id/iv_body_front"
                 app:layout_constraintTop_toTopOf="@id/iv_body_front"
-                app:layout_constraintVertical_bias="0.907"
-                app:layout_constraintWidth_percent="0.14" />
+                app:layout_constraintVertical_bias="0.839"
+                app:layout_constraintWidth_percent="0.1" />
 
             <View
-                android:id="@+id/btn_leg_right_f"
+                android:id="@+id/btn_thigh_r_f"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/bg_hotspot"
@@ -209,15 +239,15 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_front"
-                app:layout_constraintHeight_percent="0.43"
-                app:layout_constraintHorizontal_bias="0.377"
+                app:layout_constraintHeight_percent="0.2"
+                app:layout_constraintHorizontal_bias="0.443"
                 app:layout_constraintStart_toStartOf="@id/iv_body_front"
                 app:layout_constraintTop_toTopOf="@id/iv_body_front"
-                app:layout_constraintVertical_bias="0.907"
-                app:layout_constraintWidth_percent="0.14" />
+                app:layout_constraintVertical_bias="0.633"
+                app:layout_constraintWidth_percent="0.135" />
 
             <View
-                android:id="@+id/btn_arm_left_f"
+                android:id="@+id/btn_thigh_l_f"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/bg_hotspot"
@@ -225,15 +255,15 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_front"
-                app:layout_constraintHeight_percent="0.32"
-                app:layout_constraintHorizontal_bias="0.777"
+                app:layout_constraintHeight_percent="0.2"
+                app:layout_constraintHorizontal_bias="0.66"
                 app:layout_constraintStart_toStartOf="@id/iv_body_front"
                 app:layout_constraintTop_toTopOf="@id/iv_body_front"
-                app:layout_constraintVertical_bias="0.297"
-                app:layout_constraintWidth_percent="0.13" />
+                app:layout_constraintVertical_bias="0.631"
+                app:layout_constraintWidth_percent="0.135" />
 
             <View
-                android:id="@+id/btn_arm_right_f"
+                android:id="@+id/btn_leg_r_f"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/bg_hotspot"
@@ -241,12 +271,145 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_front"
-                app:layout_constraintHeight_percent="0.32"
-                app:layout_constraintHorizontal_bias="0.256"
+                app:layout_constraintHeight_percent="0.16"
+                app:layout_constraintHorizontal_bias="0.458"
                 app:layout_constraintStart_toStartOf="@id/iv_body_front"
                 app:layout_constraintTop_toTopOf="@id/iv_body_front"
-                app:layout_constraintVertical_bias="0.29"
-                app:layout_constraintWidth_percent="0.13" />
+                app:layout_constraintVertical_bias="0.84"
+                app:layout_constraintWidth_percent="0.1" />
+
+            <View
+                android:id="@+id/btn_foot_r_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.11"
+                app:layout_constraintHorizontal_bias="0.446"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.98"
+                app:layout_constraintWidth_percent="0.1" />
+
+
+            <View
+                android:id="@+id/btn_foot_l_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.11"
+                app:layout_constraintHorizontal_bias="0.657"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.971"
+                app:layout_constraintWidth_percent="0.1" />
+
+            <View
+                android:id="@+id/btn_upper_arm_r_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="2"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintHorizontal_bias="0.32"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.266"
+                app:layout_constraintWidth_percent="0.075" />
+
+            <View
+                android:id="@+id/btn_upper_arm_l_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="2"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintHorizontal_bias="0.773"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.268"
+                app:layout_constraintWidth_percent="0.075" />
+
+            <View
+                android:id="@+id/btn_fore_arm_r_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="16"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.135"
+                app:layout_constraintHorizontal_bias="0.268"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.424"
+                app:layout_constraintWidth_percent="0.08" />
+
+            <View
+                android:id="@+id/btn_fore_arm_l_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="-16"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.135"
+                app:layout_constraintHorizontal_bias="0.833"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.428"
+                app:layout_constraintWidth_percent="0.08" />
+
+            <View
+                android:id="@+id/btn_hand_r_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.09"
+                app:layout_constraintHorizontal_bias="0.16"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.555"
+                app:layout_constraintWidth_percent="0.12" />
+
+            <View
+                android:id="@+id/btn_hand_l_f"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_front"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_front"
+                app:layout_constraintHeight_percent="0.09"
+                app:layout_constraintHorizontal_bias="0.957"
+                app:layout_constraintStart_toStartOf="@id/iv_body_front"
+                app:layout_constraintTop_toTopOf="@id/iv_body_front"
+                app:layout_constraintVertical_bias="0.554"
+                app:layout_constraintWidth_percent="0.12" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -255,20 +418,65 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-            <ImageView
-            android:id="@+id/iv_body_back"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/body_back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"/>
 
-            <View android:id="@+id/btn_lower_back" android:layout_width="0dp" android:layout_height="0dp" app:layout_constraintWidth_percent="0.25"  app:layout_constraintHeight_percent="0.19" android:background="@drawable/bg_hotspot" android:clickable="true" android:focusable="true" app:layout_constraintBottom_toBottomOf="@id/iv_body_back" app:layout_constraintEnd_toEndOf="@id/iv_body_back" app:layout_constraintHorizontal_bias="0.478" app:layout_constraintStart_toStartOf="@id/iv_body_back" app:layout_constraintTop_toTopOf="@id/iv_body_back" app:layout_constraintVertical_bias="0.427" />
+            <ImageView
+                android:id="@+id/iv_body_back"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/body_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/btn_lower_back"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.065"
+                app:layout_constraintHorizontal_bias="0.474"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.403"
+                app:layout_constraintWidth_percent="0.25" />
+
+            <View
+                android:id="@+id/btn_buttock_r_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.095"
+                app:layout_constraintHorizontal_bias="0.359"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.485"
+                app:layout_constraintWidth_percent="0.15" />
+
+            <View
+                android:id="@+id/btn_buttock_l_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.095"
+                app:layout_constraintHorizontal_bias="0.587"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.486"
+                app:layout_constraintWidth_percent="0.15" />
 
             <View
                 android:id="@+id/btn_upper_back"
@@ -279,11 +487,11 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_back"
-                app:layout_constraintHeight_percent="0.14"
-                app:layout_constraintHorizontal_bias="0.487"
+                app:layout_constraintHeight_percent="0.16"
+                app:layout_constraintHorizontal_bias="0.468"
                 app:layout_constraintStart_toStartOf="@id/iv_body_back"
                 app:layout_constraintTop_toTopOf="@id/iv_body_back"
-                app:layout_constraintVertical_bias="0.231"
+                app:layout_constraintVertical_bias="0.256"
                 app:layout_constraintWidth_percent="0.26" />
 
             <View
@@ -295,17 +503,15 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_back"
-                app:layout_constraintHeight_percent="0.16"
-                app:layout_constraintHorizontal_bias="0.464"
+                app:layout_constraintHeight_percent="0.1"
+                app:layout_constraintHorizontal_bias="0.47"
                 app:layout_constraintStart_toStartOf="@id/iv_body_back"
                 app:layout_constraintTop_toTopOf="@id/iv_body_back"
-                app:layout_constraintVertical_bias="0.053"
-                app:layout_constraintWidth_percent="0.20" />
-
-            <View android:id="@+id/btn_leg_right_b" android:layout_width="0dp" android:layout_height="0dp" app:layout_constraintWidth_percent="0.12"  app:layout_constraintHeight_percent="0.40" android:background="@drawable/bg_hotspot" android:clickable="true" android:focusable="true" app:layout_constraintBottom_toBottomOf="@id/iv_body_back" app:layout_constraintEnd_toEndOf="@id/iv_body_back" app:layout_constraintHorizontal_bias="0.586" app:layout_constraintStart_toStartOf="@id/iv_body_back" app:layout_constraintTop_toTopOf="@id/iv_body_back" app:layout_constraintVertical_bias="0.913" />
+                app:layout_constraintVertical_bias="0.079"
+                app:layout_constraintWidth_percent="0.17" />
 
             <View
-                android:id="@+id/btn_arm_right_b"
+                android:id="@+id/btn_neck_b"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/bg_hotspot"
@@ -313,12 +519,12 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_back"
-                app:layout_constraintHeight_percent="0.34"
-                app:layout_constraintHorizontal_bias="0.768"
+                app:layout_constraintHeight_percent="0.03"
+                app:layout_constraintHorizontal_bias="0.465"
                 app:layout_constraintStart_toStartOf="@id/iv_body_back"
                 app:layout_constraintTop_toTopOf="@id/iv_body_back"
-                app:layout_constraintVertical_bias="0.31"
-                app:layout_constraintWidth_percent="0.14" />
+                app:layout_constraintVertical_bias="0.176"
+                app:layout_constraintWidth_percent="0.11" />
 
             <View
                 android:id="@+id/btn_leg_left_b"
@@ -329,15 +535,15 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_back"
-                app:layout_constraintHeight_percent="0.40"
-                app:layout_constraintHorizontal_bias="0.365"
+                app:layout_constraintHeight_percent="0.14"
+                app:layout_constraintHorizontal_bias="0.587"
                 app:layout_constraintStart_toStartOf="@id/iv_body_back"
                 app:layout_constraintTop_toTopOf="@id/iv_body_back"
-                app:layout_constraintVertical_bias="0.912"
-                app:layout_constraintWidth_percent="0.12" />
+                app:layout_constraintVertical_bias="0.843"
+                app:layout_constraintWidth_percent="0.1" />
 
             <View
-                android:id="@+id/btn_arm_left_b"
+                android:id="@+id/btn_thigh_r_b"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/bg_hotspot"
@@ -345,12 +551,177 @@
                 android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
                 app:layout_constraintEnd_toEndOf="@id/iv_body_back"
-                app:layout_constraintHeight_percent="0.34"
-                app:layout_constraintHorizontal_bias="0.21"
+                app:layout_constraintHeight_percent="0.18"
+                app:layout_constraintHorizontal_bias="0.346"
                 app:layout_constraintStart_toStartOf="@id/iv_body_back"
                 app:layout_constraintTop_toTopOf="@id/iv_body_back"
-                app:layout_constraintVertical_bias="0.301"
-                app:layout_constraintWidth_percent="0.14" />
+                app:layout_constraintVertical_bias="0.665"
+                app:layout_constraintWidth_percent="0.135" />
+
+            <View
+                android:id="@+id/btn_thigh_l_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.18"
+                app:layout_constraintHorizontal_bias="0.597"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.665"
+                app:layout_constraintWidth_percent="0.135" />
+
+            <View
+                android:id="@+id/btn_leg_r_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.14"
+                app:layout_constraintHorizontal_bias="0.363"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.848"
+                app:layout_constraintWidth_percent="0.1" />
+
+
+            <View
+                android:id="@+id/btn_foot_r_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.12"
+                app:layout_constraintHorizontal_bias="0.363"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.989"
+                app:layout_constraintWidth_percent="0.1" />
+
+            <View
+                android:id="@+id/btn_foot_l_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.12"
+                app:layout_constraintHorizontal_bias="0.587"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.987"
+                app:layout_constraintWidth_percent="0.11" />
+
+            <View
+                android:id="@+id/btn_upper_arm_r_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="2"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintHorizontal_bias="0.24"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.268"
+                app:layout_constraintWidth_percent="0.075" />
+
+            <View
+                android:id="@+id/btn_upper_arm_l_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="2"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.15"
+                app:layout_constraintHorizontal_bias="0.703"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.266"
+                app:layout_constraintWidth_percent="0.075" />
+
+            <View
+                android:id="@+id/btn_fore_arm_r_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="16"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.135"
+                app:layout_constraintHorizontal_bias="0.199"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.435"
+                app:layout_constraintWidth_percent="0.08" />
+
+            <View
+                android:id="@+id/btn_fore_arm_l_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                android:rotation="-16"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.135"
+                app:layout_constraintHorizontal_bias="0.775"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.435"
+                app:layout_constraintWidth_percent="0.08" />
+
+            <View
+                android:id="@+id/btn_hand_r_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.09"
+                app:layout_constraintHorizontal_bias="0.05"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.559"
+                app:layout_constraintWidth_percent="0.12" />
+
+            <View
+                android:id="@+id/btn_hand_l_b"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_hotspot"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="@id/iv_body_back"
+                app:layout_constraintEnd_toEndOf="@id/iv_body_back"
+                app:layout_constraintHeight_percent="0.09"
+                app:layout_constraintHorizontal_bias="0.91"
+                app:layout_constraintStart_toStartOf="@id/iv_body_back"
+                app:layout_constraintTop_toTopOf="@id/iv_body_back"
+                app:layout_constraintVertical_bias="0.56"
+                app:layout_constraintWidth_percent="0.12" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

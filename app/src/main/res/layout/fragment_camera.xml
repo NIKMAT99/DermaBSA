@@ -77,14 +77,14 @@
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="42dp"
                 app:cardElevation="0dp"
-                app:strokeColor="@color/white"
+                app:strokeColor="#FFFFFF"
                 app:strokeWidth="4dp" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="64dp"
                 android:layout_height="64dp"
                 android:layout_gravity="center"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="2dp"
                 app:strokeWidth="0dp" />

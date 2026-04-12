@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Allinea e ruota"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:text="Trascina e pizzica per allineare alla sagoma"
             android:textColor="@color/derma_text_dark"
-            android:textSize="15sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -135,10 +135,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_accept_photo"
-            android:layout_width="183dp"
-            android:layout_height="50dp"
+            android:layout_width="160dp"
+            android:layout_height="54dp"
             android:layout_marginStart="16dp"
-            android:text="Analizza"
+            android:text="Conferma"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"

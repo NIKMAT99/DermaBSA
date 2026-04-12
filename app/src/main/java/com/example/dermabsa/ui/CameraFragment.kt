@@ -33,6 +33,7 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import com.example.dermabsa.ui.MainViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class CameraFragment : Fragment(R.layout.fragment_camera) {
 
@@ -47,7 +48,14 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         if (isGranted) {
             startCamera()
         } else {
-            Toast.makeText(requireContext(), "Permesso fotocamera negato.", Toast.LENGTH_LONG).show()
+            // Troviamo la root view per far sopravvivere la Snackbar alla chiusura della pagina
+            val rootView = requireActivity().findViewById<View>(android.R.id.content)
+
+            Snackbar.make(rootView, "Permesso fotocamera negato.", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_text_dark))
+                .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                .show()
+
             findNavController().popBackStack()
         }
     }
@@ -144,7 +152,10 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
-                    Toast.makeText(requireContext(), "Errore salvataggio foto", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(requireView(), "Errore durante il salvataggio della foto", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_text_dark))
+                        .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        .show()
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
@@ -174,7 +185,10 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        Toast.makeText(requireContext(), "Errore elaborazione immagine", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(requireView(), "Errore elaborazione immagine", Snackbar.LENGTH_SHORT)
+                            .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_text_dark))
+                            .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                            .show()
                     }
                 }
             }

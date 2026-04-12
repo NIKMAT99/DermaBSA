@@ -19,7 +19,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.graphics.Bitmap
+import androidx.core.content.ContextCompat
 import com.example.dermabsa.model.BodyRegion
+import com.google.android.material.snackbar.Snackbar
+
 class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
     private val viewModel: MainViewModel by activityViewModels()
@@ -70,7 +73,10 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             val emptyMap = BitmapFactory.decodeResource(resources, R.drawable.body_front)
             alignmentView.setImages(emptyMap, photo)
         } else {
-            Toast.makeText(requireContext(), "Errore: Foto non trovata", Toast.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), "Errore: Foto non trovata", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_text_dark))
+                .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                .show()
         }
 
         // --- GESTIONE DEI CONTROLLI UI ---
@@ -114,7 +120,12 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             val region = viewModel.selectedRegion.value
 
             if (region == null) {
-                Toast.makeText(requireContext(), "Errore: Zona del corpo mancante", Toast.LENGTH_SHORT).show()
+                // NUOVA SNACKBAR AL POSTO DEL TOAST
+                Snackbar.make(requireView(), "Errore: Zona del corpo mancante", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.derma_text_dark))
+                    .setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    .show()
+
                 return@setOnClickListener
             }
 
