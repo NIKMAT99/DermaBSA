@@ -10,14 +10,18 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.dermabsa.ui.AlignmentView
+import com.example.dermabsa.utils.AILesionDetector
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import android.graphics.Bitmap
 import com.example.dermabsa.model.BodyRegion
-
 class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
-    // Recuperiamo i dati condivisi (foto scattata e zona scelta)
     private val viewModel: MainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,6 +74,7 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         }
 
         // --- GESTIONE DEI CONTROLLI UI ---
+
         // Slider Opacità Guida
         sliderOpacity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -131,7 +136,6 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
     override fun onResume() {
         super.onResume()
-        // Se torniamo a questa schermata (es. dopo un errore), riabilitiamo i tasti!
         view?.let {
             val btnAccept = it.findViewById<MaterialButton>(R.id.btn_accept_photo)
             val btnRetake = it.findViewById<MaterialButton>(R.id.btn_retake_photo)
