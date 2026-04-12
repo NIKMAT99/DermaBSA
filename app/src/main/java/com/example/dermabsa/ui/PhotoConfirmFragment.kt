@@ -39,7 +39,7 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
         // --- NOVITÀ: CARICHIAMO L'OUTLINE CORRETTO IN BASE ALLA ZONA ---
         val region = viewModel.selectedRegion.value
-     /*  val overlayResId = when (region) {
+        val overlayResId = when (region) {
             // TESTA E COLLO
             BodyRegion.HEAD_FRONT -> R.drawable.overlay_head_f
             BodyRegion.HEAD_BACK -> R.drawable.overlay_head_b
@@ -47,10 +47,10 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             BodyRegion.NECK_BACK -> R.drawable.overlay_neck_b
 
             // TRONCO DIVISO
-            BodyRegion.CHEST -> R.drawable.overlay_chest_f
-            BodyRegion.ABDOMEN -> R.drawable.overlay_abdomen_f
-            BodyRegion.UPPER_BACK -> R.drawable.overlay_upper_back_b
-            BodyRegion.LOWER_BACK -> R.drawable.overlay_lower_back_b
+            BodyRegion.CHEST -> R.drawable.overlay_petto_f
+            BodyRegion.ABDOMEN -> R.drawable.overlay_addome_f
+            BodyRegion.UPPER_BACK -> R.drawable.overlay_tronco_b
+            BodyRegion.LOWER_BACK -> R.drawable.overlay_lower_b
 
             // BRACCIA SUPERIORI
             BodyRegion.UPPER_ARM_LEFT_FRONT -> R.drawable.overlay_upper_arm_fsx
@@ -82,10 +82,10 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             BodyRegion.THIGH_RIGHT_BACK -> R.drawable.overlay_thigh_bdx
 
             // GAMBE (STINCHI/POLPACCI)
-            BodyRegion.LOWER_LEG_LEFT_FRONT -> R.drawable.overlay_lower_leg_fsx
-            BodyRegion.LOWER_LEG_RIGHT_FRONT -> R.drawable.overlay_lower_leg_fdx
-            BodyRegion.LOWER_LEG_LEFT_BACK -> R.drawable.overlay_lower_leg_bsx
-            BodyRegion.LOWER_LEG_RIGHT_BACK -> R.drawable.overlay_lower_leg_bdx
+            BodyRegion.LOWER_LEG_LEFT_FRONT -> R.drawable.overlay_leg_fsx
+            BodyRegion.LOWER_LEG_RIGHT_FRONT -> R.drawable.overlay_leg_fdx
+            BodyRegion.LOWER_LEG_LEFT_BACK -> R.drawable.overlay_leg_bsx
+            BodyRegion.LOWER_LEG_RIGHT_BACK -> R.drawable.overlay_leg_bdx
 
             // PIEDI
             BodyRegion.FOOT_LEFT_FRONT -> R.drawable.overlay_foot_fsx
@@ -97,7 +97,7 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         }
 
         guideOverlay.setImageResource(overlayResId)
-    */
+
 
         // Carichiamo la foto nella Custom View (il livello sottostante)
         val photo = viewModel.patientPhoto.value
