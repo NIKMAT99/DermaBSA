@@ -38,9 +38,37 @@ class AlignmentView @JvmOverloads constructor(
     })
 
     fun setImages(map: Bitmap?, photo: Bitmap) {
-        mapBitmap = map
         patientPhotoBitmap = photo
+        photoMatrix.reset() // Azzera eventuali zoom o spostamenti precedenti
+        setupInitialMatrix() // Calcola l'inquadratura perfetta
         invalidate()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        setupInitialMatrix()
+    }
+
+    private fun setupInitialMatrix() {
+        val bitmap = patientPhotoBitmap ?: return
+        if (width == 0 || height == 0) return
+
+        photoMatrix.reset()
+
+        // 1. Calcoliamo i fattori di scala per entrambi gli assi
+        val scaleX = width.toFloat() / bitmap.width
+        val scaleY = height.toFloat() / bitmap.height
+
+        // 2. USO DI Math.max: La foto si ingrandisce finché non copre TUTTO lo schermo.
+        // Prima usavamo Math.min, che la rimpiccioliva per farla stare tutta dentro.
+        val scale = Math.max(scaleX, scaleY)
+
+        // 3. Centriamo l'immagine
+        val dx = (width - bitmap.width * scale) / 2f
+        val dy = (height - bitmap.height * scale) / 2f
+
+        photoMatrix.postScale(scale, scale)
+        photoMatrix.postTranslate(dx, dy)
     }
 
     override fun onDraw(canvas: Canvas) {
