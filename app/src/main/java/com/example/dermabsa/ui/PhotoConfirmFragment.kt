@@ -115,13 +115,13 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
         // Slider Opacità Guida
         sliderOpacity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                // Converte il progresso 0-100 in opacità 0.0-1.0
                 guideOverlay.alpha = progress / 100f
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
+        guideOverlay.alpha = sliderOpacity.progress / 100f
         // Bottone Rifai: torna indietro alla schermata Scan
         btnRetake.setOnClickListener {
             findNavController().popBackStack()

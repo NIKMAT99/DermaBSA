@@ -99,25 +99,62 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             viewModel.selectedRegion.value = BodyRegion.CHEST
         }
 
-       /* when (regioneScelta) {
+        when (regioneScelta) {
+            // TESTA E COLLO
             "HEAD_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_head_f)
             "HEAD_BACK" -> overlayImg.setImageResource(R.drawable.overlay_head_b)
-            "TRUNK_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_petto_f)
+            "NECK_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_neck_f)
+            "NECK_BACK" -> overlayImg.setImageResource(R.drawable.overlay_neck_b)
+
+            // TRONCO
+            "CHEST" -> overlayImg.setImageResource(R.drawable.overlay_petto_f)
             "ABDOMEN" -> overlayImg.setImageResource(R.drawable.overlay_addome_f)
             "UPPER_BACK" -> overlayImg.setImageResource(R.drawable.overlay_tronco_b)
             "LOWER_BACK" -> overlayImg.setImageResource(R.drawable.overlay_lower_b)
-            "ARM_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_arm_fsx)
-            "ARM_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_arm_fdx)
-            "ARM_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_arm_bsx)
-            "ARM_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_arm_bdx)
-            "LEG_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fsx)
-            "LEG_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fdx)
-            "LEG_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bsx)
-            "LEG_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bdx)
+
+            // BRACCIA SUPERIORI
+            "UPPER_ARM_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_fsx)
+            "UPPER_ARM_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_fdx)
+            "UPPER_ARM_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_bsx)
+            "UPPER_ARM_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_bdx)
+
+            // AVAMBRACCIA
+            "FOREARM_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_forearm_fsx)
+            "FOREARM_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_forearm_fdx)
+            "FOREARM_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_forearm_bsx)
+            "FOREARM_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_forearm_bdx)
+
+            // MANI
+            "HAND_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_hand_fsx)
+            "HAND_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_hand_fdx)
+            "HAND_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_hand_bsx)
+            "HAND_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_hand_bdx)
+
+            // GENITALI E GLUTEI
             "GENITALS" -> overlayImg.setImageResource(R.drawable.overlay_gen)
+            "BUTTOCK_LEFT" -> overlayImg.setImageResource(R.drawable.overlay_buttock_sx)
+            "BUTTOCK_RIGHT" -> overlayImg.setImageResource(R.drawable.overlay_buttock_dx)
+
+            // COSCE
+            "THIGH_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_thigh_fsx)
+            "THIGH_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_thigh_fdx)
+            "THIGH_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_thigh_bsx)
+            "THIGH_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_thigh_bdx)
+
+            // GAMBE (STINCHI/POLPACCI)
+            "LOWER_LEG_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fsx)
+            "LOWER_LEG_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fdx)
+            "LOWER_LEG_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bsx)
+            "LOWER_LEG_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bdx)
+
+            // PIEDI
+            "FOOT_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_foot_fsx)
+            "FOOT_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_foot_fdx)
+            "FOOT_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_foot_bsx)
+            "FOOT_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_foot_bdx)
+
             else -> overlayImg.setImageResource(R.drawable.overlay_gen)
         }
-        */
     }
 
     private fun startCamera() {
