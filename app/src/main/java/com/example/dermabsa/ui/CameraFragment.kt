@@ -18,6 +18,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.AspectRatio
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -67,6 +68,25 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        val btnFlash = view.findViewById<ImageButton>(R.id.btn_flash)
+        var isFlashOn = false // Di base il flash è spento
+
+        btnFlash.setOnClickListener {
+            // Invertiamo lo stato: se era spento si accende, se era acceso si spegne
+            isFlashOn = !isFlashOn
+
+            if (isFlashOn) {
+                // Cambiamo l'icona
+                btnFlash.setImageResource(R.drawable.ic_flash_on)
+                // Diciamo a CameraX di usare il flash al momento dello scatto
+                imageCapture?.flashMode = androidx.camera.core.ImageCapture.FLASH_MODE_ON
+            } else {
+                // Rimettiamo l'icona del flash spento
+                btnFlash.setImageResource(R.drawable.ic_flash_off)
+                // Spegniamo il flash in CameraX
+                imageCapture?.flashMode = androidx.camera.core.ImageCapture.FLASH_MODE_OFF
+            }
+        }
 
         viewFinder = view.findViewById(R.id.view_finder)
         cameraExecutor = Executors.newSingleThreadExecutor()
@@ -87,9 +107,8 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
     private fun impostaOverlayDinamico(view: View) {
         val overlayImg = view.findViewById<ImageView>(R.id.iv_camera_guide_overlay)
 
-        // 1. Leggiamo la regione passata
         // 1. Leggiamo la regione passata come testo (String)
-        val regioneScelta = arguments?.getString("REGION_KEY") ?: "TRUNK_FRONT"
+        val regioneScelta = arguments?.getString("REGION_KEY") ?: "CHEST"
 
         // 2. Convertiamo il testo nel tipo 'BodyRegion' che il ViewModel si aspetta!
         try {
@@ -99,72 +118,90 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
             viewModel.selectedRegion.value = BodyRegion.CHEST
         }
 
+        // 3. Funzione per convertire i DP in Pixel (necessario per setPadding da codice)
+        val scale = resources.displayMetrics.density
+        fun dpToPx(dp: Int): Int = (dp * scale + 0.5f).toInt()
+
+        var resId = R.drawable.overlay_petto_f
+        var paddingInDp = 50 // Padding standard
+
+        // 4. Decidiamo l'immagine E il padding in base alle proporzioni anatomiche
         when (regioneScelta) {
-            // TESTA E COLLO
-            "HEAD_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_head_f)
-            "HEAD_BACK" -> overlayImg.setImageResource(R.drawable.overlay_head_b)
-            "NECK_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_neck_f)
-            "NECK_BACK" -> overlayImg.setImageResource(R.drawable.overlay_neck_b)
+            // TESTA E COLLO (Parti medio-piccole, padding grande)
+            "HEAD_FRONT" -> { resId = R.drawable.overlay_head_f; paddingInDp = 20 }
+            "HEAD_BACK" -> { resId = R.drawable.overlay_head_b; paddingInDp = 20 }
+            "NECK_FRONT" -> { resId = R.drawable.overlay_neck_f; paddingInDp = 20 }
+            "NECK_BACK" -> { resId = R.drawable.overlay_neck_b; paddingInDp = 20 }
 
-            // TRONCO
-            "CHEST" -> overlayImg.setImageResource(R.drawable.overlay_petto_f)
-            "ABDOMEN" -> overlayImg.setImageResource(R.drawable.overlay_addome_f)
-            "UPPER_BACK" -> overlayImg.setImageResource(R.drawable.overlay_tronco_b)
-            "LOWER_BACK" -> overlayImg.setImageResource(R.drawable.overlay_lower_b)
+            // TRONCO E ADDOME (Parti larghe, padding medio)
+            "CHEST" -> { resId = R.drawable.overlay_petto_f; paddingInDp = 10 }
+            "ABDOMEN" -> { resId = R.drawable.overlay_addome_f; paddingInDp = 10 }
+            "UPPER_BACK" -> { resId = R.drawable.overlay_tronco_b; paddingInDp = 10 }
+            "LOWER_BACK" -> { resId = R.drawable.overlay_lower_b; paddingInDp = 10 }
 
-            // BRACCIA SUPERIORI
-            "UPPER_ARM_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_fsx)
-            "UPPER_ARM_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_fdx)
-            "UPPER_ARM_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_bsx)
-            "UPPER_ARM_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_upper_arm_bdx)
+            // BRACCIA E AVAMBRACCIA (Parti lunghe, padding piccolo per farle stendere)
+            "UPPER_ARM_LEFT_FRONT" -> { resId = R.drawable.overlay_upper_arm_fsx; paddingInDp = 10 }
+            "UPPER_ARM_RIGHT_FRONT" -> { resId = R.drawable.overlay_upper_arm_fdx; paddingInDp = 10 }
+            "UPPER_ARM_LEFT_BACK" -> { resId = R.drawable.overlay_upper_arm_bsx; paddingInDp = 10 }
+            "UPPER_ARM_RIGHT_BACK" -> { resId = R.drawable.overlay_upper_arm_bdx; paddingInDp = 10 }
+            "FOREARM_LEFT_FRONT" -> { resId = R.drawable.overlay_forearm_fsx; paddingInDp = 10 }
+            "FOREARM_RIGHT_FRONT" -> { resId = R.drawable.overlay_forearm_fdx; paddingInDp = 10 }
+            "FOREARM_LEFT_BACK" -> { resId = R.drawable.overlay_forearm_bsx; paddingInDp = 10 }
+            "FOREARM_RIGHT_BACK" -> { resId = R.drawable.overlay_forearm_bdx; paddingInDp = 10 }
 
-            // AVAMBRACCIA
-            "FOREARM_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_forearm_fsx)
-            "FOREARM_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_forearm_fdx)
-            "FOREARM_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_forearm_bsx)
-            "FOREARM_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_forearm_bdx)
-
-            // MANI
-            "HAND_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_hand_fsx)
-            "HAND_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_hand_fdx)
-            "HAND_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_hand_bsx)
-            "HAND_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_hand_bdx)
+            // MANI (Parti molto piccole, padding molto grande)
+            "HAND_LEFT_FRONT" -> { resId = R.drawable.overlay_hand_fsx; paddingInDp = 20 }
+            "HAND_RIGHT_FRONT" -> { resId = R.drawable.overlay_hand_fdx; paddingInDp = 20 }
+            "HAND_LEFT_BACK" -> { resId = R.drawable.overlay_hand_bsx; paddingInDp = 20 }
+            "HAND_RIGHT_BACK" -> { resId = R.drawable.overlay_hand_bdx; paddingInDp = 20 }
 
             // GENITALI E GLUTEI
-            "GENITALS" -> overlayImg.setImageResource(R.drawable.overlay_gen)
-            "BUTTOCK_LEFT" -> overlayImg.setImageResource(R.drawable.overlay_buttock_sx)
-            "BUTTOCK_RIGHT" -> overlayImg.setImageResource(R.drawable.overlay_buttock_dx)
+            "GENITALS" -> { resId = R.drawable.overlay_gen; paddingInDp = 10 }
+            "BUTTOCK_LEFT" -> { resId = R.drawable.overlay_buttock_sx; paddingInDp = 20 }
+            "BUTTOCK_RIGHT" -> { resId = R.drawable.overlay_buttock_dx; paddingInDp = 20 }
 
-            // COSCE
-            "THIGH_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_thigh_fsx)
-            "THIGH_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_thigh_fdx)
-            "THIGH_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_thigh_bsx)
-            "THIGH_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_thigh_bdx)
+            // COSCE E GAMBE (Parti lunghe, padding piccolo)
+            "THIGH_LEFT_FRONT" -> { resId = R.drawable.overlay_thigh_fsx; paddingInDp = 20 }
+            "THIGH_RIGHT_FRONT" -> { resId = R.drawable.overlay_thigh_fdx; paddingInDp = 20 }
+            "THIGH_LEFT_BACK" -> { resId = R.drawable.overlay_thigh_bsx; paddingInDp = 20 }
+            "THIGH_RIGHT_BACK" -> { resId = R.drawable.overlay_thigh_bdx; paddingInDp = 20 }
+            "LOWER_LEG_LEFT_FRONT" -> { resId = R.drawable.overlay_leg_fsx; paddingInDp = 10 }
+            "LOWER_LEG_RIGHT_FRONT" -> { resId = R.drawable.overlay_leg_fdx; paddingInDp = 10 }
+            "LOWER_LEG_LEFT_BACK" -> { resId = R.drawable.overlay_leg_bsx; paddingInDp = 10 }
+            "LOWER_LEG_RIGHT_BACK" -> { resId = R.drawable.overlay_leg_bdx; paddingInDp = 10 }
 
-            // GAMBE (STINCHI/POLPACCI)
-            "LOWER_LEG_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fsx)
-            "LOWER_LEG_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_leg_fdx)
-            "LOWER_LEG_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bsx)
-            "LOWER_LEG_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_leg_bdx)
+            // PIEDI (Parti molto piccole, padding molto grande)
+            "FOOT_LEFT_FRONT" -> { resId = R.drawable.overlay_foot_fsx; paddingInDp = 20 }
+            "FOOT_RIGHT_FRONT" -> { resId = R.drawable.overlay_foot_fdx; paddingInDp = 20 }
+            "FOOT_LEFT_BACK" -> { resId = R.drawable.overlay_foot_bsx; paddingInDp = 20 }
+            "FOOT_RIGHT_BACK" -> { resId = R.drawable.overlay_foot_bdx; paddingInDp = 20 }
 
-            // PIEDI
-            "FOOT_LEFT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_foot_fsx)
-            "FOOT_RIGHT_FRONT" -> overlayImg.setImageResource(R.drawable.overlay_foot_fdx)
-            "FOOT_LEFT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_foot_bsx)
-            "FOOT_RIGHT_BACK" -> overlayImg.setImageResource(R.drawable.overlay_foot_bdx)
-
-            else -> overlayImg.setImageResource(R.drawable.overlay_gen)
+            else -> { resId = R.drawable.overlay_petto_f; paddingInDp = 50 }
         }
+
+        // 5. Applichiamo l'immagine e i margini calcolati
+        overlayImg.setImageResource(resId)
+        val p = dpToPx(paddingInDp)
+        overlayImg.setPadding(p, p, p, p)
     }
 
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         cameraProviderFuture.addListener({
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(viewFinder.surfaceProvider)
-            }
-            imageCapture = ImageCapture.Builder().build()
+
+            // 1. Diciamo all'anteprima di usare il formato 16:9
+            val preview = Preview.Builder()
+                .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                .build().also {
+                    it.setSurfaceProvider(viewFinder.surfaceProvider)
+                }
+
+            // 2. MAGIA: Diciamo anche allo SCATTO di usare i 16:9!
+            imageCapture = ImageCapture.Builder()
+                .setTargetAspectRatio(AspectRatio.RATIO_16_9)
+                .build()
+
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 cameraProvider.unbindAll()

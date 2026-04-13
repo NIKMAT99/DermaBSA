@@ -59,7 +59,6 @@
                 android:id="@+id/iv_confirm_guide_overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="60dp"
                 android:scaleType="fitCenter"
                 app:tint="@color/derma_teal" />
 
@@ -123,19 +122,20 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_retake_photo"
             style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="164dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="24dp"
+            android:layout_width="137dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
             android:text="Rifai"
+            android:textColor="@color/derma_text_dark"
             android:textSize="16dp"
             android:textStyle="bold"
-            android:textColor="@color/derma_text_dark"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/slider_guide_opacity" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_accept_photo"
-            android:layout_width="160dp"
+            android:layout_width="147dp"
             android:layout_height="54dp"
             android:layout_marginStart="16dp"
             android:text="Conferma"

@@ -31,73 +31,14 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
 
         // UI Binding
         val alignmentView = view.findViewById<AlignmentView>(R.id.alignment_view_preview)
-        val guideOverlay = view.findViewById<ImageView>(R.id.iv_confirm_guide_overlay)
         val sliderOpacity = view.findViewById<SeekBar>(R.id.slider_guide_opacity)
+        val guideOverlay = view.findViewById<ImageView>(R.id.iv_confirm_guide_overlay)
         val btnRetake = view.findViewById<MaterialButton>(R.id.btn_retake_photo)
         val btnAccept = view.findViewById<MaterialButton>(R.id.btn_accept_photo)
         val btnRotate = view.findViewById<View>(R.id.btn_rotate_photo)
 
-        // --- NOVITÀ: CARICHIAMO L'OUTLINE CORRETTO IN BASE ALLA ZONA ---
-        val region = viewModel.selectedRegion.value
-        val overlayResId = when (region) {
-            // TESTA E COLLO
-            BodyRegion.HEAD_FRONT -> R.drawable.overlay_head_f
-            BodyRegion.HEAD_BACK -> R.drawable.overlay_head_b
-            BodyRegion.NECK_FRONT -> R.drawable.overlay_neck_f
-            BodyRegion.NECK_BACK -> R.drawable.overlay_neck_b
-
-            // TRONCO DIVISO
-            BodyRegion.CHEST -> R.drawable.overlay_petto_f
-            BodyRegion.ABDOMEN -> R.drawable.overlay_addome_f
-            BodyRegion.UPPER_BACK -> R.drawable.overlay_tronco_b
-            BodyRegion.LOWER_BACK -> R.drawable.overlay_lower_b
-
-            // BRACCIA SUPERIORI
-            BodyRegion.UPPER_ARM_LEFT_FRONT -> R.drawable.overlay_upper_arm_fsx
-            BodyRegion.UPPER_ARM_RIGHT_FRONT -> R.drawable.overlay_upper_arm_fdx
-            BodyRegion.UPPER_ARM_LEFT_BACK -> R.drawable.overlay_upper_arm_bsx
-            BodyRegion.UPPER_ARM_RIGHT_BACK -> R.drawable.overlay_upper_arm_bdx
-
-            // AVAMBRACCIA
-            BodyRegion.FOREARM_LEFT_FRONT -> R.drawable.overlay_forearm_fsx
-            BodyRegion.FOREARM_RIGHT_FRONT -> R.drawable.overlay_forearm_fdx
-            BodyRegion.FOREARM_LEFT_BACK -> R.drawable.overlay_forearm_bsx
-            BodyRegion.FOREARM_RIGHT_BACK -> R.drawable.overlay_forearm_bdx
-
-            // MANI
-            BodyRegion.HAND_LEFT_FRONT -> R.drawable.overlay_hand_fsx
-            BodyRegion.HAND_RIGHT_FRONT -> R.drawable.overlay_hand_fdx
-            BodyRegion.HAND_LEFT_BACK -> R.drawable.overlay_hand_bsx
-            BodyRegion.HAND_RIGHT_BACK -> R.drawable.overlay_hand_bdx
-
-            // GENITALI E GLUTEI
-            BodyRegion.GENITALS -> R.drawable.overlay_gen
-            BodyRegion.BUTTOCK_LEFT -> R.drawable.overlay_buttock_sx
-            BodyRegion.BUTTOCK_RIGHT -> R.drawable.overlay_buttock_dx
-
-            // COSCE
-            BodyRegion.THIGH_LEFT_FRONT -> R.drawable.overlay_thigh_fsx
-            BodyRegion.THIGH_RIGHT_FRONT -> R.drawable.overlay_thigh_fdx
-            BodyRegion.THIGH_LEFT_BACK -> R.drawable.overlay_thigh_bsx
-            BodyRegion.THIGH_RIGHT_BACK -> R.drawable.overlay_thigh_bdx
-
-            // GAMBE (STINCHI/POLPACCI)
-            BodyRegion.LOWER_LEG_LEFT_FRONT -> R.drawable.overlay_leg_fsx
-            BodyRegion.LOWER_LEG_RIGHT_FRONT -> R.drawable.overlay_leg_fdx
-            BodyRegion.LOWER_LEG_LEFT_BACK -> R.drawable.overlay_leg_bsx
-            BodyRegion.LOWER_LEG_RIGHT_BACK -> R.drawable.overlay_leg_bdx
-
-            // PIEDI
-            BodyRegion.FOOT_LEFT_FRONT -> R.drawable.overlay_foot_fsx
-            BodyRegion.FOOT_RIGHT_FRONT -> R.drawable.overlay_foot_fdx
-            BodyRegion.FOOT_LEFT_BACK -> R.drawable.overlay_foot_bsx
-            BodyRegion.FOOT_RIGHT_BACK -> R.drawable.overlay_foot_bdx
-
-            else -> R.drawable.body_front // Fallback di sicurezza
-        }
-
-        guideOverlay.setImageResource(overlayResId)
-
+        // CHIAMIAMO LA MAGIA DINAMICA QUI!
+        impostaOverlayDinamico(view)
 
         // Carichiamo la foto nella Custom View (il livello sottostante)
         val photo = viewModel.patientPhoto.value
@@ -187,4 +128,70 @@ class PhotoConfirmFragment : Fragment(R.layout.fragment_photo_confirm) {
             btnRetake.isEnabled = true
         }
     }
+
+    private fun impostaOverlayDinamico(view: View) {
+        val overlayImg = view.findViewById<ImageView>(R.id.iv_confirm_guide_overlay)
+        val region = viewModel.selectedRegion.value
+
+        // Funzione per convertire DP in Pixel
+        val scale = resources.displayMetrics.density
+        fun dpToPx(dp: Int): Int = (dp * scale + 0.5f).toInt()
+
+        var resId = R.drawable.overlay_petto_f
+        var paddingInDp = 50
+
+        // Usiamo direttamente l'Enum BodyRegion! Molto più pulito.
+        when (region) {
+            BodyRegion.HEAD_FRONT -> { resId = R.drawable.overlay_head_f; paddingInDp = 20 }
+            BodyRegion.HEAD_BACK -> { resId = R.drawable.overlay_head_b; paddingInDp = 20 }
+            BodyRegion.NECK_FRONT -> { resId = R.drawable.overlay_neck_f; paddingInDp = 20 }
+            BodyRegion.NECK_BACK -> { resId = R.drawable.overlay_neck_b; paddingInDp = 20 }
+
+            BodyRegion.CHEST -> { resId = R.drawable.overlay_petto_f; paddingInDp = 10 }
+            BodyRegion.ABDOMEN -> { resId = R.drawable.overlay_addome_f; paddingInDp = 10 }
+            BodyRegion.UPPER_BACK -> { resId = R.drawable.overlay_tronco_b; paddingInDp = 10 }
+            BodyRegion.LOWER_BACK -> { resId = R.drawable.overlay_lower_b; paddingInDp = 10 }
+
+            BodyRegion.UPPER_ARM_LEFT_FRONT -> { resId = R.drawable.overlay_upper_arm_fsx; paddingInDp = 10 }
+            BodyRegion.UPPER_ARM_RIGHT_FRONT -> { resId = R.drawable.overlay_upper_arm_fdx; paddingInDp = 10 }
+            BodyRegion.UPPER_ARM_LEFT_BACK -> { resId = R.drawable.overlay_upper_arm_bsx; paddingInDp = 10 }
+            BodyRegion.UPPER_ARM_RIGHT_BACK -> { resId = R.drawable.overlay_upper_arm_bdx; paddingInDp = 10 }
+            BodyRegion.FOREARM_LEFT_FRONT -> { resId = R.drawable.overlay_forearm_fsx; paddingInDp = 10 }
+            BodyRegion.FOREARM_RIGHT_FRONT -> { resId = R.drawable.overlay_forearm_fdx; paddingInDp = 10 }
+            BodyRegion.FOREARM_LEFT_BACK -> { resId = R.drawable.overlay_forearm_bsx; paddingInDp = 10 }
+            BodyRegion.FOREARM_RIGHT_BACK -> { resId = R.drawable.overlay_forearm_bdx; paddingInDp = 10 }
+
+            BodyRegion.HAND_LEFT_FRONT -> { resId = R.drawable.overlay_hand_fsx; paddingInDp = 20 }
+            BodyRegion.HAND_RIGHT_FRONT -> { resId = R.drawable.overlay_hand_fdx; paddingInDp = 20 }
+            BodyRegion.HAND_LEFT_BACK -> { resId = R.drawable.overlay_hand_bsx; paddingInDp = 20 }
+            BodyRegion.HAND_RIGHT_BACK -> { resId = R.drawable.overlay_hand_bdx; paddingInDp = 20 }
+
+            BodyRegion.GENITALS -> { resId = R.drawable.overlay_gen; paddingInDp = 10 }
+            BodyRegion.BUTTOCK_LEFT -> { resId = R.drawable.overlay_buttock_sx; paddingInDp = 20 }
+            BodyRegion.BUTTOCK_RIGHT -> { resId = R.drawable.overlay_buttock_dx; paddingInDp = 20 }
+
+            BodyRegion.THIGH_LEFT_FRONT -> { resId = R.drawable.overlay_thigh_fsx; paddingInDp = 20 }
+            BodyRegion.THIGH_RIGHT_FRONT -> { resId = R.drawable.overlay_thigh_fdx; paddingInDp = 20 }
+            BodyRegion.THIGH_LEFT_BACK -> { resId = R.drawable.overlay_thigh_bsx; paddingInDp = 20 }
+            BodyRegion.THIGH_RIGHT_BACK -> { resId = R.drawable.overlay_thigh_bdx; paddingInDp = 20 }
+            BodyRegion.LOWER_LEG_LEFT_FRONT -> { resId = R.drawable.overlay_leg_fsx; paddingInDp = 10 }
+            BodyRegion.LOWER_LEG_RIGHT_FRONT -> { resId = R.drawable.overlay_leg_fdx; paddingInDp = 10 }
+            BodyRegion.LOWER_LEG_LEFT_BACK -> { resId = R.drawable.overlay_leg_bsx; paddingInDp = 10 }
+            BodyRegion.LOWER_LEG_RIGHT_BACK -> { resId = R.drawable.overlay_leg_bdx; paddingInDp = 10 }
+
+            BodyRegion.FOOT_LEFT_FRONT -> { resId = R.drawable.overlay_foot_fsx; paddingInDp = 20 }
+            BodyRegion.FOOT_RIGHT_FRONT -> { resId = R.drawable.overlay_foot_fdx; paddingInDp = 20 }
+            BodyRegion.FOOT_LEFT_BACK -> { resId = R.drawable.overlay_foot_bsx; paddingInDp = 20 }
+            BodyRegion.FOOT_RIGHT_BACK -> { resId = R.drawable.overlay_foot_bdx; paddingInDp = 20 }
+
+            else -> { resId = R.drawable.overlay_petto_f; paddingInDp = 50 }
+        }
+
+        // Applichiamo immagine e margini dinamici
+        overlayImg.setImageResource(resId)
+        val p = dpToPx(paddingInDp)
+        overlayImg.setPadding(p, p, p, p)
+    }
+
+
 }
