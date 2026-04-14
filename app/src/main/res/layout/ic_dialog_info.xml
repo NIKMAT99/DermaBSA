@@ -8,65 +8,106 @@
     app:cardElevation="0dp"
     app:cardBackgroundColor="@color/white">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center">
+        android:fadeScrollbars="false">
 
-        <ImageView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal"> <ImageView
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@android:drawable/ic_dialog_info"
             app:tint="#D32F2F" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Ricorda bene"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="Per aiutare l'AI a valutare correttamente la macchia, assicurati di:\n\n• Avere un'ottima illuminazione\n• Usare uno sfondo neutro e pulito\n• Tenere il telefono fermo"
-            android:textAlignment="center"
-            android:textSize="15sp"
-            android:textColor="@color/derma_text_dark" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="24dp">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_dialog_cancel"
-                style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="Annulla"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Ricorda bene"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 android:textColor="@color/black" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_dialog_understand"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@color/derma_teal"
-                app:cornerRadius="12dp"
-                android:text="Ho capito!"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Per aiutare l'AI a valutare correttamente la macchia, assicurati di:"
+                android:textAlignment="center"
+                android:textSize="15sp"
+                android:textColor="@color/derma_text_dark" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• Avere un'ottima illuminazione"
+                    android:textSize="15sp"
+                    android:textColor="@color/derma_text_dark"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• Usare uno sfondo neutro e pulito"
+                    android:textSize="15sp"
+                    android:textColor="@color/derma_text_dark"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="• Tenere il telefono fermo"
+                    android:textSize="15sp"
+                    android:textColor="@color/derma_text_dark" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="28dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_dialog_cancel"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="4dp"
+                    android:paddingHorizontal="4dp"
+                    android:text="Annulla"
+                    android:textColor="@color/black" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_dialog_understand"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="4dp"
+                    android:paddingHorizontal="4dp"
+                    android:backgroundTint="@color/derma_teal"
+                    app:cornerRadius="12dp"
+                    android:text="Ho capito!"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 </com.google.android.material.card.MaterialCardView>
