@@ -147,13 +147,5 @@ class AlignmentView @JvmOverloads constructor(
 
         return resultBitmap
     }
-
-    fun rotate90() {
-        // Ruota di 90 gradi prendendo come perno il centro della View
-        val centerX = width / 2f
-        val centerY = height / 2f
-        photoMatrix.postRotate(90f, centerX, centerY)
-        invalidate() // Ridisegna
-    }
 }
 
