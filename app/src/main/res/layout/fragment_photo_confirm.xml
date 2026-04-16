@@ -122,33 +122,36 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_retake_photo"
             style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="137dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
             android:text="Rifai"
             android:textColor="@color/derma_text_dark"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_accept_photo"
             app:layout_constraintTop_toBottomOf="@id/slider_guide_opacity" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_accept_photo"
-            android:layout_width="147dp"
-            android:layout_height="54dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="24dp"
             android:text="Conferma"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
             app:backgroundTint="@color/derma_teal"
             app:cornerRadius="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/btn_retake_photo"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_retake_photo"
-            app:layout_constraintTop_toTopOf="@id/btn_retake_photo" />
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btn_retake_photo"
+            app:layout_constraintBottom_toBottomOf="@id/btn_retake_photo" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

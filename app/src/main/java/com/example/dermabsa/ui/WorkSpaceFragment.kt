@@ -285,20 +285,27 @@ class WorkspaceFragment : Fragment(R.layout.fragment_workspace) {
     }
 
     private fun mostraSceltaSorgente(bundle: Bundle) {
-        val options = arrayOf("Fotocamera", "Galleria")
+        val dialogView = layoutInflater.inflate(R.layout.dialog_choose_source, null)
 
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Scegli sorgente immagine")
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> {
-                        findNavController().navigate(R.id.action_workspace_to_camera, bundle)
-                    }
-                    1 -> {
-                        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    }
-                }
-            }
-            .show()
+        val customDialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        customDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val btnCamera = dialogView.findViewById<MaterialButton>(R.id.btn_source_camera)
+        val btnGallery = dialogView.findViewById<MaterialButton>(R.id.btn_source_gallery)
+
+        btnCamera.setOnClickListener {
+            customDialog.dismiss() // Chiudiamo prima il pop-up
+            findNavController().navigate(R.id.action_workspace_to_camera, bundle)
+        }
+
+        btnGallery.setOnClickListener {
+            customDialog.dismiss() // Chiudiamo prima il pop-up
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
+        customDialog.show()
     }
 }
